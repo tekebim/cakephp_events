@@ -73,6 +73,7 @@ class AppController extends Controller
 
         // Actions allowed as not authed
         // Actions [display and login ] for all controllers
+        // action "display" is from PageController
         $this->Auth->allow(['display', 'login']);
 
         /*

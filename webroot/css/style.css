@@ -457,6 +457,16 @@ div.message.hidden {
     height: 0;
 }
 
+div.message.warning {
+    background-color: #c38740;
+    color: #FFF;
+}
+
+div.message.warning:before {
+    padding: 11px 16px 14px 7px;
+    color: #c38740;
+    content: "x";
+}
 
 .vertical-table th {
     padding: 0.5625rem 0.625rem;
@@ -521,4 +531,16 @@ div.message.hidden {
 table td {
     vertical-align: top;
     word-break: break-all;
+}
+
+
+nav a {
+    margin: 0 15px;
+    color: #fff;
+    padding: 5px;
+}
+
+nav a.active {
+    color: #116d76;
+    background: #fff;
 }

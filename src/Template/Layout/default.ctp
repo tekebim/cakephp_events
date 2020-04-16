@@ -43,11 +43,11 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <?php } else { ?>
         <?php if (!empty($this->Session->read('Auth.User.avatar'))) { ?>
             <figure class="circle">
-                <?= $this->Html->image('avatars/' . $this->Session->read('Auth.User.avatar'), ['alt' => 'Avatar de ' . $this->Session->read('Auth.User.login')]) ?>
+                <?= $this->Html->image('avatars/' . $this->Session->read('Auth.User.avatar'), ['width' => 30, 'alt' => 'Avatar de ' . $this->Session->read('Auth.User.login')]) ?>
             </figure>
         <?php } else { ?>
             <figure class="circle">
-                <?= $this->Html->image('default.png', ['alt' => 'Avatar par défaut']) ?>
+                <?= $this->Html->image('default.png', ['width' => 30, 'alt' => 'Avatar par défaut']) ?>
             </figure>
         <?php } ?>
         <?= $this->Session->read('Auth.User.login'); ?>

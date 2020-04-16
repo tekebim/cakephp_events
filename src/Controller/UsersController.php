@@ -28,6 +28,7 @@ class UsersController extends AppController
         } else {
             // Check if is from post method
             if ($this->request->is(['post'])) {
+                var_dump($_POST);
                 $user = $this->Auth->identify();
                 // Test authentification
                 if ($user) {
@@ -161,7 +162,7 @@ class UsersController extends AppController
                 $this->Auth->setUser($authUser);
                 // Display Flash success
                 $this->Flash->success('Bienvenue');
-                return $this->redirect(['action' => 'login']);
+                return $this->redirect(['action' => 'index']);
             }
             // Error while trying to save
             $this->Flash->error('Une erreur est survenue. Veuillez réessayer.');

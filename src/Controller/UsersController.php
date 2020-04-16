@@ -42,7 +42,7 @@ class UsersController extends AppController
                         $this->Flash->success('Bienvenue : ' . $user->login);
                         return $this->redirect($this->Auth->redirectUrl());
                     } else {
-                        $this->Flash->success('Error update');
+                        $this->Flash->success('Une erreur est survenue.');
                     }
                 }
                 $this->Flash->error('Connexion impossible');
@@ -50,23 +50,91 @@ class UsersController extends AppController
         }
     }
 
-    public function afterLogin()
+    public function logout()
+    {
+        // Get the current user information
+        $u = $this->Auth->user();
+        $user = $this->Users->get($u['id']);
+        // We save the current time for the lastout row
+        $user->lastout = time();
+        // We try to the save / update that on dabatase
+        if ($this->Users->save($user)) {
+            $this->Flash->success('Au plaisir de vous revoir bientôt parmis nous ' . $user->login);
+            return $this->redirect($this->Auth->logout());
+        } else {
+            $this->Flash->success('Une erreur est survenue.');
+        }
+    }
+
+    public function edit()
     {
         $u = $this->Auth->user();
         $e = $this->Users->find()->where(['id' => $u['id']]);
-
-        $firstElement = $e->first();
-        if ($this->Users->save($firstElement)) {
-            $this->Flash->success('Modification du datetime de last connection ok');
-            return $this->redirect(['action' => 'view', $u['id']]);
+        // If not result found
+        if ($e->isEmpty()) {
+            $this->Flash->error('Utilisateur introuvable');
+            return $this->redirect(['action' => 'add']);
         }
-        $this->Flash->error('Erreur lors de la tentative de modification');
+        // Get the first record as element
+        $firstElement = $e->first();
+        // Share to the view
+        $this->set('e', $firstElement);
+        // Check if it's from post method
+        if ($this->request->is(['post', 'put'])) {
+            $this->Users->patchEntity($firstElement, $this->request->getData());
+            if ($this->Users->save($firstElement)) {
+                $this->Flash->success('Modification(s) de votre compte effecutée(s)');
+                return $this->redirect(['action' => 'view', $u['id']]);
+            }
+            $this->Flash->error('Erreur lors de la tentative de modification');
+        }
     }
 
-    public function logout()
+    public function editavatar()
     {
-        $this->Flash->success('Déconnexion');
-        return $this->redirect($this->Auth->logout());
+        // on recupere les infos par rapport à l'avatar actuel ( user connecté )
+        $modif = $this->Users->get($this->Auth->user('id'));
+        // $modif = $this->Users->find()->where(['id' => $u['id']]);
+        $this->set(compact('modif'));
+        // On copie l'ancien nom de fichier
+        $ancienNom = $modif->avatar;
+
+        // on copie en mémoire le nom de l'ancien fichier
+        $currentFileName = $modif->avatar;
+
+        // si on recoit un form
+        if ($this->request->is(['post', 'put'])) {
+            // on patch les données
+            $this->Users->patchEntity($modif, $this->request->getData());
+
+            // si on a pas recu le fichier ou le format de l'image n est pas le bon
+            if (empty($this->request->getData()['avatar']['name']) || !in_array($this->request->getData()['avatar']['type'], ['image/png', 'image/jpg', 'image/jpeg', 'image/gif'])) {
+                // Flash error
+                $this->Flash->error('Format erroné. Autosié : png, pdf, gif');
+            } else {
+                // On recupere l extension --> pathinfo
+                $ext = pathinfo($this->request->getData()['avatar']['name'], PATHINFO_EXTENSION);
+                // on creer le nouveau nom
+                $newName = 'user-' . $modif->id . '-' . time() . '.' . $ext;
+                // on deplace le fichier de la memoire temporaire vers le dossier avatars
+                move_uploaded_file($this->request->getData()['avatar']['tmp_name'], WWW_ROOT . 'img/avatars/' . $newName);
+                // on remplace le npm de l'objet à sauvegarder
+                $modif->avatar = $newName;
+                // On essaie la sauvegarde (if else)
+                if($this->Users->save($modif)){
+                    $this->Flash->success('Image uploadée');
+                    // si l'ancien fichier existe --> !empty && file_exists
+                    if(!empty($ancienNom) && file_exists(WWW_ROOT.'img/avatars/'.$ancienNom)) {
+                        unlink(WWW_ROOT.'img/avatars/'.$ancienNom);
+                    }
+
+                    return $this->redirect(['action' => 'view', $modif->id]);
+                }
+                else {
+                    $this->Flash->error('Modification impossible');
+                }
+            }
+        }
     }
 
     public function add()

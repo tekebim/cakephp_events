@@ -1,5 +1,4 @@
 <h1>Mon profil</h1>
-<?php var_dump($user); ?>
 <?php if (!empty($user->avatar)) { ?>
     <figure>
         <?= $this->Html->image('avatars/' . $user->avatar, ['alt' => 'Avatar de ' . $user->pseudo]) ?>
@@ -9,6 +8,8 @@
         <?= $this->Html->image('default.png', ['alt' => 'Avatar par défaut']) ?>
     </figure>
 <?php } ?>
+
+<?= $this->Html->link('Upload une nouvelle image', ['action' => 'editavatar']); ?>
 
 <table>
     <tbody>
@@ -30,8 +31,14 @@
         <td>Dernière connexion : <?= $user->lastin->i18nFormat('dd/MM/yy') ?>
             à <?= $user->lastin->i18nFormat('hh:mm') ?></td>
     </tr>
+    <tr>
+        <td>Dernière déconnexion : <?= $user->lastout->i18nFormat('dd/MM/yy') ?>
+            à <?= $user->lastin->i18nFormat('hh:mm') ?></td>
+    </tr>
     </tbody>
 </table>
+
+<?= $this->Html->link('Mettre à jour mes informations', ['action' => 'edit']); ?>
 
 
 <p><?= $this->Html->link('Retour à la page d\'accueil', ['action' => 'index', 'controller' => 'dashboard']); ?></p>

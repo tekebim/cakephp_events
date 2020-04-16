@@ -1,10 +1,11 @@
 <h1>Modification de votre compte :</h1>
+
 <?= $this->Form->create($e) ?>
 <fieldset>
     <legend>Votre image de profil :</legend>
-    <?php if (!empty($user->avatar)) { ?>
+    <?php if (!empty($e->avatar)) { ?>
         <figure>
-            <?= $this->Html->image('avatars/' . $user->avatar, ['alt' => 'Avatar de ' . $user->pseudo]) ?>
+            <?= $this->Html->image('avatars/' . $e->avatar, ['alt' => 'Avatar de ' . $e->login]) ?>
         </figure>
     <?php } else { ?>
         <figure>

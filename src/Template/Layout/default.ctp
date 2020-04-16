@@ -41,8 +41,17 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         <?= $this->Html->link('Se connecter', ['controller' => 'Users', 'action' => 'login'], ['class' => ($this->templatePath == 'Users' && $this->template == 'login') ? 'active' : '']); ?>
         <?= $this->Html->link('Créer un compte', ['controller' => 'Users', 'action' => 'add'], ['class' => ($this->templatePath == 'Users' && $this->template == 'add') ? 'active' : '']); ?>
     <?php } else { ?>
+        <?php if (!empty($this->Session->read('Auth.User.avatar'))) { ?>
+            <figure class="circle">
+                <?= $this->Html->image('avatars/' . $this->Session->read('Auth.User.avatar'), ['alt' => 'Avatar de ' . $this->Session->read('Auth.User.login')]) ?>
+            </figure>
+        <?php } else { ?>
+            <figure class="circle">
+                <?= $this->Html->image('default.png', ['alt' => 'Avatar par défaut']) ?>
+            </figure>
+        <?php } ?>
         <?= $this->Session->read('Auth.User.login'); ?>
-        <?= $this->Html->link('Voir mon profil', ['controller' => 'Users', 'action' => 'view', $this->Session->read('Auth.User.id')], ['class' => ($this->templatePath == 'Users' && $this->template == 'edit') ? 'active' : '']); ?>
+        <?= $this->Html->link('Voir mon profil', ['controller' => 'Users', 'action' => 'view', $this->Session->read('Auth.User.id')], ['class' => ($this->templatePath == 'Users' && $this->template == 'view') ? 'active' : '']); ?>
         <?= $this->Html->link('Modifier mon compte', ['controller' => 'Users', 'action' => 'edit'], ['class' => ($this->templatePath == 'Users' && $this->template == 'edit') ? 'active' : '']); ?>
         <?= $this->Form->postLink('Supprimer mon compte', ['controller' => 'Users', 'action' => 'delete'], ['confirm' => 'Etes-vous sûr ?']); ?>
         <?= $this->Html->link('Se déconnecter', ['controller' => 'Users', 'action' => 'logout']); ?>

@@ -31,10 +31,14 @@
         <td>Dernière connexion : <?= $user->lastin->i18nFormat('dd/MM/yy') ?>
             à <?= $user->lastin->i18nFormat('hh:mm') ?></td>
     </tr>
-    <tr>
-        <td>Dernière déconnexion : <?= $user->lastout->i18nFormat('dd/MM/yy') ?>
-            à <?= $user->lastin->i18nFormat('hh:mm') ?></td>
-    </tr>
+    <?php if (!empty($user->lastout)) { ?>
+        <tr>
+            <td>Dernière déconnexion :
+                <?= $user->lastout->i18nFormat('dd/MM/yy') ?>
+                à <?= $user->lastin->i18nFormat('hh:mm') ?>
+            </td>
+        </tr>
+    <?php } ?>
     </tbody>
 </table>
 

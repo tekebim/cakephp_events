@@ -532,3 +532,15 @@ table td {
     vertical-align: top;
     word-break: break-all;
 }
+
+
+nav a {
+    margin: 0 15px;
+    color: #fff;
+    padding: 5px;
+}
+
+nav a.active {
+    color: #116d76;
+    background: #fff;
+}

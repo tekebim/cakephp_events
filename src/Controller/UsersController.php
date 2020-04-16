@@ -24,7 +24,7 @@ class UsersController extends AppController
         // Check if user already auth
         if ($this->Auth->user()) {
             $this->Flash->warning('Vous êtes déjà authentifié');
-            // return $this->redirect($this->Auth->redirectUrl());
+            return $this->redirect($this->Auth->redirectUrl());
         } else {
             // Check if is from post method
             if ($this->request->is(['post'])) {
@@ -90,6 +90,38 @@ class UsersController extends AppController
         }
     }
 
+    private function checkAvatar() {
+        // on recupere les infos par rapport à l'avatar actuel ( user connecté )
+        $modif = $this->Users->get($this->Auth->user('id'));
+        // si on a pas recu le fichier ou le format de l'image n est pas le bon
+        if (empty($this->request->getData()['avatar']['name']) || !in_array($this->request->getData()['avatar']['type'], ['image/png', 'image/jpg', 'image/jpeg', 'image/gif'])) {
+            // Flash error
+            $this->Flash->error('Format erroné. Autosié : png, pdf, gif');
+        } else {
+            // On recupere l extension --> pathinfo
+            $ext = pathinfo($this->request->getData()['avatar']['name'], PATHINFO_EXTENSION);
+            // on creer le nouveau nom
+            $newName = 'user-' . $modif->id . '-' . time() . '.' . $ext;
+            // on deplace le fichier de la memoire temporaire vers le dossier avatars
+            move_uploaded_file($this->request->getData()['avatar']['tmp_name'], WWW_ROOT . 'img/avatars/' . $newName);
+            // on remplace le npm de l'objet à sauvegarder
+            $modif->avatar = $newName;
+            // On essaie la sauvegarde (if else)
+            if($this->Users->save($modif)){
+                $this->Flash->success('Image uploadée');
+                // si l'ancien fichier existe --> !empty && file_exists
+                if(!empty($ancienNom) && file_exists(WWW_ROOT.'img/avatars/'.$ancienNom)) {
+                    unlink(WWW_ROOT.'img/avatars/'.$ancienNom);
+                }
+
+                return $this->redirect(['action' => 'view', $modif->id]);
+            }
+            else {
+                $this->Flash->error('Modification impossible');
+            }
+        }
+    }
+
     public function editavatar()
     {
         // on recupere les infos par rapport à l'avatar actuel ( user connecté )
@@ -107,33 +139,7 @@ class UsersController extends AppController
             // on patch les données
             $this->Users->patchEntity($modif, $this->request->getData());
 
-            // si on a pas recu le fichier ou le format de l'image n est pas le bon
-            if (empty($this->request->getData()['avatar']['name']) || !in_array($this->request->getData()['avatar']['type'], ['image/png', 'image/jpg', 'image/jpeg', 'image/gif'])) {
-                // Flash error
-                $this->Flash->error('Format erroné. Autosié : png, pdf, gif');
-            } else {
-                // On recupere l extension --> pathinfo
-                $ext = pathinfo($this->request->getData()['avatar']['name'], PATHINFO_EXTENSION);
-                // on creer le nouveau nom
-                $newName = 'user-' . $modif->id . '-' . time() . '.' . $ext;
-                // on deplace le fichier de la memoire temporaire vers le dossier avatars
-                move_uploaded_file($this->request->getData()['avatar']['tmp_name'], WWW_ROOT . 'img/avatars/' . $newName);
-                // on remplace le npm de l'objet à sauvegarder
-                $modif->avatar = $newName;
-                // On essaie la sauvegarde (if else)
-                if($this->Users->save($modif)){
-                    $this->Flash->success('Image uploadée');
-                    // si l'ancien fichier existe --> !empty && file_exists
-                    if(!empty($ancienNom) && file_exists(WWW_ROOT.'img/avatars/'.$ancienNom)) {
-                        unlink(WWW_ROOT.'img/avatars/'.$ancienNom);
-                    }
-
-                    return $this->redirect(['action' => 'view', $modif->id]);
-                }
-                else {
-                    $this->Flash->error('Modification impossible');
-                }
-            }
+            $this->checkAvatar();
         }
     }
 
@@ -147,12 +153,15 @@ class UsersController extends AppController
             // Get form data
             $n = $this->Users->patchEntity($n, $this->request->getData());
             // Test saving record on database
-            if ($this->Users->save($n)) {
+            if ($result = $this->Users->save($n)) {
                 // Test successful
+                // Retrieve user from DB
+                $authUser = $this->Users->get($result->id)->toArray();
+                // Log user in using Auth
+                $this->Auth->setUser($authUser);
                 // Display Flash success
                 $this->Flash->success('Bienvenue');
                 return $this->redirect(['action' => 'login']);
-                // return $this->redirect(['action'=>'login']);
             }
             // Error while trying to save
             $this->Flash->error('Une erreur est survenue. Veuillez réessayer.');
@@ -172,7 +181,7 @@ class UsersController extends AppController
         $user = $this->Users->get($u['id']);
         if ($this->Users->delete($user)) {
             // Message de success
-            $this->Flash->success('Supprimé');
+            $this->Flash->success('Votre compte a bien été supprimé');
             // On redirige
             // return $this->redirect(['action' => 'index']);
             return $this->redirect($this->Auth->logout());

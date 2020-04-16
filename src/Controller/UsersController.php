@@ -27,7 +27,7 @@ class UsersController extends AppController
             // Test authentification
             if($user){
                 $this->Auth->setUser($user);
-                $this->Flash->success('Bienvenue ' . $user);
+                $this->Flash->success('Bienvenue');
                 return $this->redirect($this->Auth->redirectUrl());
             }
             $this->Flash->error('Connexion impossible');

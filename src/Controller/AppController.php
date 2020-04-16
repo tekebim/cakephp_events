@@ -27,7 +27,10 @@ use Cake\Event\Event;
  */
 class AppController extends Controller
 {
-
+    public function beforeRender(Event $e){
+        // Share connexion's data in all view
+        $this->set('Auth', $this->Auth);
+    }
     /**
      * Initialization hook method.
      *
@@ -45,6 +48,32 @@ class AppController extends Controller
             'enableBeforeRedirect' => false,
         ]);
         $this->loadComponent('Flash');
+
+        // Connexion - Auth part
+        $this->loadComponent('Auth', [
+            // How we connect
+            'authenticate' => [
+                // Type
+                'Form' => [
+                    // Input uses
+                    'fields' => [
+                        'username' => 'login',
+                        'password' => 'password'
+                    ]
+                ]
+            ],
+            // In wich location
+            'loginAction' => [
+                'controller' => 'Users',
+                'action' => 'login'
+            ],
+            // Rediction if not allowed
+            'unauthorizedRedirect' => $this->referer()
+        ]);
+
+        // Actions allowed as not authed
+        // Actions [display and login ] for all controllers
+        $this->Auth->allow(['display', 'login']);
 
         /*
          * Enable the following component for recommended CakePHP security settings.

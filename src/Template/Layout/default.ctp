@@ -42,8 +42,9 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         <?= $this->Html->link('Créer un compte', ['controller' => 'Users', 'action' => 'add'], ['class' => ($this->templatePath == 'Users' && $this->template == 'add') ? 'active' : '']); ?>
     <?php } else { ?>
         <?= $this->Session->read('Auth.User.login'); ?>
-        <?= $this->Html->link('Modifier le compte', ['controller' => 'Users', 'action' => 'edit'], ['class' => ($this->templatePath == 'Users' && $this->template == 'edit') ? 'active' : '']); ?>
-        <?= $this->Form->postLink('Supprimer le compte', ['controller' => 'Users', 'action' => 'delete'], ['confirm' => 'Etes-vous sûr ?']); ?>
+        <?= $this->Html->link('Voir mon profil', ['controller' => 'Users', 'action' => 'view', $this->Session->read('Auth.User.id')], ['class' => ($this->templatePath == 'Users' && $this->template == 'edit') ? 'active' : '']); ?>
+        <?= $this->Html->link('Modifier mon compte', ['controller' => 'Users', 'action' => 'edit'], ['class' => ($this->templatePath == 'Users' && $this->template == 'edit') ? 'active' : '']); ?>
+        <?= $this->Form->postLink('Supprimer mon compte', ['controller' => 'Users', 'action' => 'delete'], ['confirm' => 'Etes-vous sûr ?']); ?>
         <?= $this->Html->link('Se déconnecter', ['controller' => 'Users', 'action' => 'logout']); ?>
     <?php } ?>
 </nav>

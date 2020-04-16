@@ -21,17 +21,46 @@ class UsersController extends AppController
 
     public function login()
     {
-        // Check if is from post method
-        if ($this->request->is(['post'])) {
-            $user = $this->Auth->identify();
-            // Test authentification
-            if($user){
-                $this->Auth->setUser($user);
-                $this->Flash->success('Bienvenue');
-                return $this->redirect($this->Auth->redirectUrl());
+        // Check if user already auth
+        if ($this->Auth->user()) {
+            $this->Flash->warning('Vous êtes déjà authentifié');
+            // return $this->redirect($this->Auth->redirectUrl());
+        } else {
+            // Check if is from post method
+            if ($this->request->is(['post'])) {
+                $user = $this->Auth->identify();
+                // Test authentification
+                if ($user) {
+                    $this->Auth->setUser($user);
+                    // Get the current user information
+                    $u = $this->Auth->user();
+                    $user = $this->Users->get($u['id']);
+                    // We save the current time for the lastin row
+                    $user->lastin = time();
+                    // We try to the save / update that on dabatase
+                    if ($this->Users->save($user)) {
+                        $this->Flash->success('Bienvenue : ' . $user->login);
+                        return $this->redirect($this->Auth->redirectUrl());
+                    } else {
+                        $this->Flash->success('Error update');
+                    }
+                }
+                $this->Flash->error('Connexion impossible');
             }
-            $this->Flash->error('Connexion impossible');
         }
+    }
+
+    public function afterLogin()
+    {
+        $u = $this->Auth->user();
+        $e = $this->Users->find()->where(['id' => $u['id']]);
+
+        $firstElement = $e->first();
+        if ($this->Users->save($firstElement)) {
+            $this->Flash->success('Modification du datetime de last connection ok');
+            return $this->redirect(['action' => 'view', $u['id']]);
+        }
+        $this->Flash->error('Erreur lors de la tentative de modification');
     }
 
     public function logout()
@@ -60,5 +89,27 @@ class UsersController extends AppController
             // Error while trying to save
             $this->Flash->error('Une erreur est survenue. Veuillez réessayer.');
         }
+    }
+
+    public function view($id)
+    {
+        $user = $this->Users->get($id);
+        $this->set(compact('user'));
+    }
+
+    public function delete()
+    {
+        $u = $this->Auth->user();
+        $this->request->allowMethod('post', 'delete');
+        $user = $this->Users->get($u['id']);
+        if ($this->Users->delete($user)) {
+            // Message de success
+            $this->Flash->success('Supprimé');
+            // On redirige
+            // return $this->redirect(['action' => 'index']);
+            return $this->redirect($this->Auth->logout());
+        }
+        $this->Flash->error('Suppression de l\'utilisateur impossible');
+        return $this->redirect(['action' => 'view', $u['id']]);
     }
 }

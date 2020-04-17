@@ -8,6 +8,7 @@
         <th>Date</th>
         <th>Lieu</th>
         <th>Créé par</th>
+        <th>Invitations</th>
     </tr>
     </thead>
     <tbody>
@@ -19,6 +20,7 @@
             <td><?= $value->beginning->i18nFormat('dd/MM/yyyy') ?></td>
             <td><?= $value->location ?></td>
             <td><?= $value->user->login ?></td>
+            <td><?= count($value->guests) ?></td>
         </tr>
     <?php } ?>
     </tbody>

@@ -15,13 +15,13 @@ class EventsController extends AppController
 
     public function index()
     {
-        $events = $this->Events->find()->contain(['Users']);
+        $events = $this->Events->find()->contain(['Users', 'Guests']);
         $this->set(compact('events'));
     }
 
     public function view($id)
     {
-        $event = $this->Events->get($id, ['contain' => ['Users',]]);
+        $event = $this->Events->get($id, ['contain' => ['Users','Guests.Users']]);
         $this->set(compact('event'));
     }
 

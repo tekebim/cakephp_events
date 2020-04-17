@@ -14,6 +14,7 @@ class EventsTable extends Table
         // self manage the columns 'created' and 'modified'
         $this->addBehavior('Timestamp');
         $this->belongsTo('Users', ['foreignKey' => 'user_id', 'joinType' => 'INNER']);
+        $this->hasMany('Guests', ['foreignKey' => 'event_id']);
     }
 
     public function validationDefault(Validator $v)

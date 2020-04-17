@@ -52,7 +52,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                         </figure>
                     <?php } else { ?>
                         <figure class="circle user__avatar">
-                            <?= $this->Html->image('default.png', ['width' => 30, 'alt' => 'Avatar par défaut']) ?>
+                            <?= $this->Html->image('default-avatar.png', ['width' => 30, 'alt' => 'Avatar par défaut']) ?>
                         </figure>
                     <?php } ?>
 

@@ -549,3 +549,14 @@ nav a.active {
 .user__details .user__avatar{
     display: inline-flex;
 }
+
+
+label.label--incoming {
+    background: green;
+    color: white;
+}
+
+label.label--done {
+    background: red;
+    color: white;
+}

@@ -15,7 +15,7 @@ class EventsController extends AppController
 
     public function index()
     {
-        $events = $this->Events->find()->contain(['Users', 'Guests']);
+        $events = $this->Events->find()->contain(['Users', 'Guests'])->order(['beginning' => 'DESC']);;
         $this->set(compact('events'));
     }
 

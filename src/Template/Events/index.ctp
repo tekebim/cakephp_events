@@ -17,7 +17,20 @@
             <td><?= $this->Html->link($value->title, ['controller' => 'Events', 'action' => 'view', $value->id]) ?></td>
             <td><?= $this->Text->truncate(strip_tags($value->description), 50, ['ellipsis' => '...']) ?>
             </td>
-            <td><?= $value->beginning->i18nFormat('dd/MM/yyyy') ?></td>
+            <td>
+                <?php
+                $currentTime = date("d/m/yy H:i");
+                $eventTime = $value->beginning->i18nFormat('dd/MM/yyyy hh:mm');
+
+                if($currentTime > $eventTime) {
+                    echo '<label class="label--incoming">A venir</label>';
+                }
+                else {
+                    echo '<label class="label--done">Terminé</label>';
+                }
+                ?>
+
+                <?= $value->beginning->i18nFormat('dd/MM/yyyy hh:mm') ?> <?php $currentDate = date("d/m/yy H:i:s"); echo $currentDate; ?></td>
             <td><?= $value->location ?></td>
             <td><?= $value->user->login ?></td>
             <td><?= count($value->guests) ?></td>

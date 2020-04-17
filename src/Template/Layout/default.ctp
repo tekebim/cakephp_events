@@ -46,9 +46,9 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             <li><?= $this->Html->link('Liste des événements', ['controller' => 'Events', 'action' => 'index'], ['class' => ($this->templatePath == 'Events' && $this->template == 'index') ? 'active' : '']); ?></li>
             <li>
                 <a class="user__details">
-                    <?php if (!empty($this->Session->read('Auth.User.avatar'))) { ?>
+                    <?php if (!empty($Auth->user('avatar'))) { ?>
                         <figure class="circle user__avatar">
-                            <?= $this->Html->image('avatars/' . $this->Session->read('Auth.User.avatar'), ['width' => 30, 'alt' => 'Avatar de ' . $this->Session->read('Auth.User.login')]) ?>
+                            <?= $this->Html->image('avatars/' . $Auth->user('avatar'), ['width' => 30, 'alt' => 'Avatar de ' . $Auth->user('login')]) ?>
                         </figure>
                     <?php } else { ?>
                         <figure class="circle user__avatar">
@@ -58,7 +58,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 
                     <span class="user__name">
 
-                    <?= $this->Session->read('Auth.User.login'); ?>
+                    <?= $Auth->user('login'); ?>
                         </span>
                 </a>
                 <ul>

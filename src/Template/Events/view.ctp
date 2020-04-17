@@ -14,12 +14,12 @@
         <td><?= $event->location ?></td>
     </tr>
     <tr>
-        <td>Invitation<?= (count($event->guests) > 1) ? 's' : '' ?></td>
-        <td><?= count($event->guests) ?>
+        <td>Invitation<?= (count($event->guests) > 1) ? 's' : '' ?> : <?= count($event->guests) ?></td>
+        <td>
             <?php if (count($event->guests) > 0) { ?>
                 <ul>
                     <?php foreach ($event->guests as $guest) { ?>
-                        <li><?= $this->Html->link($guest->user->login, ['controller' => 'Users', 'action' => 'view', $guest->user->id]); ?></li>
+                        <li><?= $this->Html->link($guest->user->login, ['controller' => 'Users', 'action' => 'view', $guest->user->id]); ?> (id:<?=$guest->user->id?>)</li>
                     <?php } ?>
                 </ul>
             <?php } ?></td>

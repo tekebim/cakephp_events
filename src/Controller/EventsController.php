@@ -84,18 +84,13 @@ class EventsController extends AppController
                 return $this->redirect(['action' => 'invite', $eventID]);
             }
 
-            $this->Flash->success('Votre invitation a été correctement envoyée');
-            /*
             // Test saving record on database
             if ($result = $this->Events->Guests->save($n)) {
                 $this->Flash->success('Votre invitation a été correctement envoyée');
-                // return $this->redirect(['action' => 'view', $eventID]);
+                return $this->redirect(['action' => 'view', $eventID]);
             }
             // Error while trying to save
             $this->Flash->error('Une erreur est survenue. Veuillez réessayer.');
-
-            */
-
         }
     }
 }

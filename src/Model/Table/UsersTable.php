@@ -12,6 +12,9 @@ class UsersTable extends Table
     {
         // self manage the columns 'created' and 'modified'
         $this->addBehavior('Timestamp');
+        // relation with Events ( table_name , relation:foreign key )
+        $this->hasMany('Events', ['foreignKey' => 'user_id', 'dependent' => true, 'cascadeCallbacks' => true]);
+        // $this->hasMany('Events', ['foreignKey' => 'user_id', 'dependent' => true, 'cascadeCallbacks' => true]);
     }
 
     public function validationDefault(Validator $v)

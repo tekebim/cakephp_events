@@ -9,6 +9,7 @@
         <th>Lieu</th>
         <th>Créé par</th>
         <th>Invitations</th>
+        <th>Status</th>
     </tr>
     </thead>
     <tbody>
@@ -32,11 +33,17 @@
                 <?= $value->beginning->i18nFormat('dd/MM/yyyy hh:mm') ?><?php $currentDate = date("d/m/yy H:i:s");
                 echo $currentDate; ?></td>
             <td><?= $value->location ?></td>
-            <td><?= $value->user->login ?></td>
+            <td><?= $this->Html->link($value->user->login, ['action' => 'view', $value->user->id, 'controller' => 'Users']) ?></td>
             <td><?= count($value->guests) ?></td>
+            <td>
+                <?php if ($Auth->user('id') === $value->user->id) {
+                    echo $this->Html->link('Gérer', ['action' => 'view', $value->id], array('class' => 'button'));
+                }
+                ?>
+            </td>
         </tr>
     <?php } ?>
     </tbody>
 </table>
 
-<?= $this->Html->link('Créer un nouvel événement', ['action' => 'add']); ?>
+<?= $this->Html->link('Créer un nouvel événement', ['action' => 'add'], array('class' => 'button')); ?>

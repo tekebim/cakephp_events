@@ -84,7 +84,7 @@ class UsersController extends AppController
         if ($this->request->is(['post', 'put'])) {
             $this->Users->patchEntity($firstElement, $this->request->getData());
             if ($this->Users->save($firstElement)) {
-                $this->Flash->success('Modification(s) de votre compte effecutée(s)');
+                $this->Flash->success('Modification(s) de votre compte effectuée(s)');
                 return $this->redirect(['action' => 'view', $u['id']]);
             }
             $this->Flash->error('Erreur lors de la tentative de modification');

@@ -5,7 +5,7 @@
         <?= $this->Form->control('beginning', ['label' => 'Date de l\'événement']); ?>
         <?= $this->Form->control('description', ['label' => 'Description']); ?>
         <?= $this->Form->control('location', ['label' => 'Lieu']); ?>
-        <?= $this->Form->control('picture', ['label' => 'Visuel de l\'énévement', 'type' => 'file']); ?>
+        <!--<?= $this->Form->control('picture', ['label' => 'Visuel de l\'énévement', 'type' => 'file']); ?>-->
         <?= $this->Form->button('Créer l\'événément'); ?>
     </fieldset>
 <?= $this->Form->end(); ?>

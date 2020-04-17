@@ -21,7 +21,14 @@ class EventsController extends AppController
 
     public function view($id)
     {
-        $event = $this->Events->get($id, ['contain' => ['Users','Guests.Users']]);
+        $event = $this->Events->get($id, ['contain' => ['Users', 'Guests.Users']]);
+        /*
+        $event = $this->Events->find()->where(['id' => $id])->contain(['Users','Guests.Users'])->first();
+        if($event->isEmpty()) {
+            $this->Flash->error('Événement introuvable');
+            return $this->redirect(['action' => 'index']);
+        }
+        */
         $this->set(compact('event'));
     }
 
@@ -39,6 +46,7 @@ class EventsController extends AppController
         if ($this->request->is(['post'])) {
             // Get form data
             $n = $this->Events->patchEntity($n, $this->request->getData());
+
             // Test saving record on database
             if ($result = $this->Events->save($n)) {
                 $this->Flash->success('Votre événement a été correctement ajouté');
@@ -46,6 +54,36 @@ class EventsController extends AppController
             }
             // Error while trying to save
             $this->Flash->error('Une erreur est survenue. Veuillez réessayer.');
+        }
+    }
+
+    public function edit($id)
+    {
+        $u = $this->Auth->user();
+        $e = $this->Events->find()->where(['id' => $id]);
+        // If not result found
+        if ($e->isEmpty()) {
+            $this->Flash->error('Événement introuvable');
+            return $this->redirect(['action' => 'index']);
+        }
+        // Get the first record as element
+        $firstElement = $e->first();
+        // Check if current user is author's event
+        if ($firstElement->user_id === $u['id']) {
+            // Share to the view
+            $this->set('e', $firstElement);
+            // Check if it's from post method
+            if ($this->request->is(['post', 'put'])) {
+                $this->Events->patchEntity($firstElement, $this->request->getData());
+                if ($this->Events->save($firstElement)) {
+                    $this->Flash->success('Modification(s) apportée(s) à l\'événement');
+                    return $this->redirect(['action' => 'view', $id]);
+                }
+                $this->Flash->error('Erreur lors de la tentative de modification');
+            }
+        } else {
+            $this->Flash->error('Vous n\'êtes pas authorisé à modifier ce contenu');
+            return $this->redirect(['action' => 'index']);
         }
     }
 
@@ -67,11 +105,11 @@ class EventsController extends AppController
             // Get current user from auth
             $u = $this->Auth->user();
 
-            echo '<pre>'. var_dump($n->user_id) .'</pre>';
-            echo '<pre>'. var_dump($n->event_id) .'</pre>';
-            echo '<pre>'. var_dump($u['id']) .'</pre>';
+            echo '<pre>' . var_dump($n->user_id) . '</pre>';
+            echo '<pre>' . var_dump($n->event_id) . '</pre>';
+            echo '<pre>' . var_dump($u['id']) . '</pre>';
 
-            if($n->user_id === $u['id']){
+            if ($n->user_id === $u['id']) {
                 $this->Flash->error('Vous participez déjà à cet événément');
                 return $this->redirect(['action' => 'invite', $eventID]);
             }
@@ -79,7 +117,7 @@ class EventsController extends AppController
             $existing = $this->Events->Guests->find()->where(['user_id' => $n->user_id, 'event_id' => $n->event_id]);
             $firstEl = $existing->first();
 
-            if($firstEl){
+            if ($firstEl) {
                 $this->Flash->error('Une invitation a déjà été envoyée à l\'utilisateur');
                 return $this->redirect(['action' => 'invite', $eventID]);
             }

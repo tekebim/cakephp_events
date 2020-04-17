@@ -35,28 +35,42 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 </head>
 <body>
 <nav class="top-bar expanded" data-topbar role="navigation">
-    <?php
-    // If user authenfiticated
-    if (!$Auth->user()) { ?>
-        <?= $this->Html->link('Se connecter', ['controller' => 'Users', 'action' => 'login'], ['class' => ($this->templatePath == 'Users' && $this->template == 'login') ? 'active' : '']); ?>
-        <?= $this->Html->link('Créer un compte', ['controller' => 'Users', 'action' => 'add'], ['class' => ($this->templatePath == 'Users' && $this->template == 'add') ? 'active' : '']); ?>
-    <?php } else { ?>
-        <?php if (!empty($this->Session->read('Auth.User.avatar'))) { ?>
-            <figure class="circle">
-                <?= $this->Html->image('avatars/' . $this->Session->read('Auth.User.avatar'), ['width' => 30, 'alt' => 'Avatar de ' . $this->Session->read('Auth.User.login')]) ?>
-            </figure>
+    <ul>
+        <?php
+        // If user authenfiticated
+        if (!$Auth->user()) { ?>
+            <?= $this->Html->link('Se connecter', ['controller' => 'Users', 'action' => 'login'], ['class' => ($this->templatePath == 'Users' && $this->template == 'login') ? 'active' : '']); ?>
+            <?= $this->Html->link('Créer un compte', ['controller' => 'Users', 'action' => 'add'], ['class' => ($this->templatePath == 'Users' && $this->template == 'add') ? 'active' : '']); ?>
         <?php } else { ?>
-            <figure class="circle">
-                <?= $this->Html->image('default.png', ['width' => 30, 'alt' => 'Avatar par défaut']) ?>
-            </figure>
+            <li>Accueil</li>
+            <li><?= $this->Html->link('Liste des événements', ['controller' => 'Events', 'action' => 'index'], ['class' => ($this->templatePath == 'Events' && $this->template == 'index') ? 'active' : '']); ?></li>
+            <li>
+                <a class="user__details">
+                    <?php if (!empty($this->Session->read('Auth.User.avatar'))) { ?>
+                        <figure class="circle user__avatar">
+                            <?= $this->Html->image('avatars/' . $this->Session->read('Auth.User.avatar'), ['width' => 30, 'alt' => 'Avatar de ' . $this->Session->read('Auth.User.login')]) ?>
+                        </figure>
+                    <?php } else { ?>
+                        <figure class="circle user__avatar">
+                            <?= $this->Html->image('default.png', ['width' => 30, 'alt' => 'Avatar par défaut']) ?>
+                        </figure>
+                    <?php } ?>
+
+                    <span class="user__name">
+
+                    <?= $this->Session->read('Auth.User.login'); ?>
+                        </span>
+                </a>
+                <ul>
+                    <li><?= $this->Html->link('Voir mon profil', ['controller' => 'Users', 'action' => 'view', $this->Session->read('Auth.User.id')], ['class' => ($this->templatePath == 'Users' && $this->template == 'view') ? 'active' : '']); ?></li>
+                    <li><?= $this->Html->link('Modifier mon compte', ['controller' => 'Users', 'action' => 'edit'], ['class' => ($this->templatePath == 'Users' && $this->template == 'edit') ? 'active' : '']); ?></li>
+                    <li><?= $this->Form->postLink('Supprimer mon compte', ['controller' => 'Users', 'action' => 'delete'], ['confirm' => 'Etes-vous sûr ?']); ?></li>
+                    <li><?= $this->Html->link('Se déconnecter', ['controller' => 'Users', 'action' => 'logout']); ?></li>
+                </ul>
+            </li>
         <?php } ?>
-        <?= $this->Session->read('Auth.User.login'); ?>
-        <?= $this->Html->link('Liste des événements', ['controller' => 'Events', 'action' => 'index'], ['class' => ($this->templatePath == 'Events' && $this->template == 'index') ? 'active' : '']); ?>
-        <?= $this->Html->link('Voir mon profil', ['controller' => 'Users', 'action' => 'view', $this->Session->read('Auth.User.id')], ['class' => ($this->templatePath == 'Users' && $this->template == 'view') ? 'active' : '']); ?>
-        <?= $this->Html->link('Modifier mon compte', ['controller' => 'Users', 'action' => 'edit'], ['class' => ($this->templatePath == 'Users' && $this->template == 'edit') ? 'active' : '']); ?>
-        <?= $this->Form->postLink('Supprimer mon compte', ['controller' => 'Users', 'action' => 'delete'], ['confirm' => 'Etes-vous sûr ?']); ?>
-        <?= $this->Html->link('Se déconnecter', ['controller' => 'Users', 'action' => 'logout']); ?>
-    <?php } ?>
+
+    </ul>
 </nav>
 <?= $this->Flash->render() ?>
 <div class="container clearfix">

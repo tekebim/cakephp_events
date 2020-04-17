@@ -544,3 +544,8 @@ nav a.active {
     color: #116d76;
     background: #fff;
 }
+
+
+.user__details .user__avatar{
+    display: inline-flex;
+}

@@ -48,4 +48,54 @@ class EventsController extends AppController
             $this->Flash->error('Une erreur est survenue. Veuillez réessayer.');
         }
     }
+
+    public function invite($eventID)
+    {
+        $n = $this->Events->newEntity();
+        $this->set(compact('n'));
+
+        $event = $this->Events->get($eventID, ['contain' => ['Users', 'Guests']]);
+        $this->set(compact('event'));
+
+        // Check if is from post method
+        if ($this->request->is(['post'])) {
+            // Get form data
+            $n = $this->Events->patchEntity($n, $this->request->getData());
+            $n->event_id = intval($eventID);
+
+            // Disable self invitation
+            // Get current user from auth
+            $u = $this->Auth->user();
+
+            echo '<pre>'. var_dump($n->user_id) .'</pre>';
+            echo '<pre>'. var_dump($n->event_id) .'</pre>';
+            echo '<pre>'. var_dump($u['id']) .'</pre>';
+
+            if($n->user_id === $u['id']){
+                $this->Flash->error('Vous participez déjà à cet événément');
+                return $this->redirect(['action' => 'invite', $eventID]);
+            }
+            // Check if invitation already sent to user
+            $existing = $this->Events->Guests->find()->where(['user_id' => $n->user_id, 'event_id' => $n->event_id]);
+            $firstEl = $existing->first();
+
+            if($firstEl){
+                $this->Flash->error('Une invitation a déjà été envoyée à l\'utilisateur');
+                return $this->redirect(['action' => 'invite', $eventID]);
+            }
+
+            $this->Flash->success('Votre invitation a été correctement envoyée');
+            /*
+            // Test saving record on database
+            if ($result = $this->Events->Guests->save($n)) {
+                $this->Flash->success('Votre invitation a été correctement envoyée');
+                // return $this->redirect(['action' => 'view', $eventID]);
+            }
+            // Error while trying to save
+            $this->Flash->error('Une erreur est survenue. Veuillez réessayer.');
+
+            */
+
+        }
+    }
 }

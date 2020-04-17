@@ -12,6 +12,8 @@ class UsersTable extends Table
     {
         // self manage the columns 'created' and 'modified'
         $this->addBehavior('Timestamp');
+        // add avatar behavior
+        $this->addBehavior('Avatar');
         // relation with Events ( table_name , relation:foreign key )
         $this->hasMany('Events', ['foreignKey' => 'user_id', 'dependent' => true, 'cascadeCallbacks' => true]);
         $this->hasMany('Guests', ['foreignKey' => 'user_id', 'dependent' => true, 'cascadeCallbacks' => true]);

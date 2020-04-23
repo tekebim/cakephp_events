@@ -67,6 +67,14 @@ class AppController extends Controller
                 'controller' => 'Users',
                 'action' => 'login'
             ],
+            'loginRedirect' => [
+                'controller' => 'Events',
+                'action' => 'index',
+            ],
+            'logoutRedirect' => [
+                'controller' => 'Dashboard',
+                'action' => 'index',
+            ],
             // Rediction if not allowed
             'unauthorizedRedirect' => $this->referer()
         ]);

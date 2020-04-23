@@ -157,11 +157,31 @@ class EventsController extends AppController
 
     public function invite($eventID)
     {
+        // Get current user from auth
+        $u = $this->Auth->user();
         $n = $this->Events->newEntity();
         $this->set(compact('n'));
 
-        $event = $this->Events->get($eventID, ['contain' => ['Users', 'Guests']]);
-        $this->set(compact('event'));
+        // $req = $this->Events->find()->where(['id' => $eventID])->contain(['Users','Guests']);
+
+        $req = $this->Events->find()->where(['Events.id' => $eventID])->contain(['Users', 'Guests', 'Guests.Users']);
+        $event = $req->first();
+
+        // Query to find all users
+        $req_guests = $this->Events->Guests->find()->select(['user_id'])->where(['event_id' => $eventID]);
+
+        $req_users = $this->Events->Users->find()->where(['Users.id !=' => $u['id'], 'Users.id NOT IN' => $req_guests])->select(['id', 'login'])->toArray();
+        // $req_users = $this->Events->Users->find()->where(['Users.id !=' => $u['id']])->select(['id', 'login'])->contain(['Guests', 'Guests.Users'])->toArray();
+
+        // $req_users = $this->Events->Users->find()->where(['Users.id !=' => $u['id']])->select(['id', 'login'])->toArray();
+        // Create array of all users
+        $users = [];
+        foreach ($req_users as $user) {
+            // For each results add to array ( id as value and login as wording
+            $users[$user['id']] = $user['login'];
+        }
+        // Share to the view
+        $this->set(compact('event', 'users', 'req_guests'));
 
         // Check if is from post method
         if ($this->request->is(['post'])) {
@@ -170,8 +190,6 @@ class EventsController extends AppController
             $n->event_id = intval($eventID);
 
             // Disable self invitation
-            // Get current user from auth
-            $u = $this->Auth->user();
 
             echo '<pre>' . var_dump($n->user_id) . '</pre>';
             echo '<pre>' . var_dump($n->event_id) . '</pre>';

@@ -171,7 +171,8 @@ class UsersController extends AppController
 
     public function view($id)
     {
-        $user = $this->Users->get($id);
+        $req = $this->Users->find()->where(['id' => $id])->contain(['Events', 'Events.Users', 'Guests']);
+        $user = $req->first();
         $this->set(compact('user'));
     }
 

@@ -28,10 +28,10 @@
             à <?= $user->modified->i18nFormat('hh:mm') ?></td>
     </tr>
     <?php if (!empty($user->lastin)) { ?>
-    <tr>
-        <td>Dernière connexion : <?= $user->lastin->i18nFormat('dd/MM/yy') ?>
-            à <?= $user->lastin->i18nFormat('hh:mm') ?></td>
-    </tr>
+        <tr>
+            <td>Dernière connexion : <?= $user->lastin->i18nFormat('dd/MM/yy') ?>
+                à <?= $user->lastin->i18nFormat('hh:mm') ?></td>
+        </tr>
     <?php } ?>
     <?php if (!empty($user->lastout)) { ?>
         <tr>
@@ -44,6 +44,34 @@
     </tbody>
 </table>
 
+<?php if (count($user->events) > 0) { ?>
+
+    <h2><?= count($user->events) > 1 ? 'Les événements' : 'L\'événement'; ?> de <strong><?= $user->login ?></strong> :</h2>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Nom de l'événément</th>
+            <th>Date de l'événément</th>
+            <th>Lieu de l'événément</th>
+            <th>Organisé par</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($user->events as $event) { ?>
+            <tr>
+                <td><?= $event->title ?></td>
+                <td><?= $event->beginning->i18nFormat('dd/MM/yy') ?>
+                    à <?= $event->beginning->i18nFormat('hh:mm') ?></td>
+                <td><?= $event->location ?></td>
+                <td><?= $event->user->login ?></td>
+            </tr>
+        <?php } ?>
+        </tbody>
+    </table>
+<?php } else { ?>
+    <h2>Aucune participation à un événement</h2>
+<?php } ?>
 <?= $this->Html->link('Mettre à jour mes informations', ['action' => 'edit']); ?>
 
 

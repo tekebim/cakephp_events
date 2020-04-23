@@ -63,7 +63,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                         </span>
                 </a>
                 <ul>
-                    <li><?= $this->Html->link('Voir mon profil', ['controller' => 'Users', 'action' => 'view', $this->Session->read('Auth.User.id')], ['class' => ($this->templatePath == 'Users' && $this->template == 'view') ? 'active' : '']); ?></li>
+                    <li><?= $this->Html->link('Voir mon profil', ['controller' => 'Users', 'action' => 'view', $Auth->user('id')], ['class' => ($this->templatePath == 'Users' && $this->template == 'view') ? 'active' : '']); ?></li>
                     <li><?= $this->Html->link('Modifier mon compte', ['controller' => 'Users', 'action' => 'edit'], ['class' => ($this->templatePath == 'Users' && $this->template == 'edit') ? 'active' : '']); ?></li>
                     <li><?= $this->Form->postLink('Supprimer mon compte', ['controller' => 'Users', 'action' => 'delete'], ['confirm' => 'Etes-vous sûr ?']); ?></li>
                     <li><?= $this->Html->link('Se déconnecter', ['controller' => 'Users', 'action' => 'logout']); ?></li>

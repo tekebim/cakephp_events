@@ -61,7 +61,19 @@
         <?php foreach ($user->events as $event) { ?>
             <tr>
                 <td><?= $event->title ?></td>
-                <td><?= $event->beginning->i18nFormat('dd/MM/yy') ?>
+                <td>
+                    <?php
+                    $currentTime = date("d/m/yy H:i");
+                    $eventTime = $event->beginning->i18nFormat('dd/MM/yyyy hh:mm');
+
+                    if ($currentTime > $eventTime) {
+                        echo '<label class="label--done">Terminé</label>';
+                    } else {
+                        echo '<label class="label--incoming">A venir</label>';
+                    }
+                    ?>
+
+                    <?= $event->beginning->i18nFormat('dd/MM/yy') ?>
                     à <?= $event->beginning->i18nFormat('hh:mm') ?></td>
                 <td><?= $event->location ?></td>
                 <td><?= $event->user->login ?></td>

@@ -58,6 +58,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 
                     <span class="user__name">
 
+                    ID : <?= $Auth->user('id'); ?> -
                     <?= $Auth->user('login'); ?>
                         </span>
                 </a>

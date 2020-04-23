@@ -47,6 +47,26 @@ class EventsController extends AppController
             // Get form data
             $n = $this->Events->patchEntity($n, $this->request->getData());
 
+            // Picture test logic
+
+            // If picture file sent
+            if (!empty($this->request->getData()['picture']['name'])) {
+                // Test image format
+                if (!in_array($this->request->getData()['picture']['type'], ['image/png', 'image/jpg', 'image/jpeg', 'image/gif'])) {
+                    $this->Flash->error('Format erroné. Liste des formats autorisés: .png, .jpeg, .jpg, .gif');
+                    return $this->redirect($this->referer());
+                }
+            }
+
+            // On recupere l extension --> pathinfo
+            $ext = pathinfo($this->request->getData()['picture']['name'], PATHINFO_EXTENSION);
+            // on creer le nouveau nom
+            $newName = 'event-' . time() . '.' . $ext;
+            echo $newName;
+            // on deplace le fichier de la memoire temporaire vers le dossier picture
+            move_uploaded_file($this->request->getData()['picture']['tmp_name'], WWW_ROOT . 'img/events/' . $newName);
+            // on remplace le npm de l'objet à sauvegarder
+            $n->picture = $newName;
             // Test saving record on database
             if ($result = $this->Events->save($n)) {
                 $this->Flash->success('Votre événement a été correctement ajouté');
@@ -84,6 +104,54 @@ class EventsController extends AppController
         } else {
             $this->Flash->error('Vous n\'êtes pas authorisé à modifier ce contenu');
             return $this->redirect(['action' => 'index']);
+        }
+    }
+
+    public function editpicture()
+    {
+        // on recupere les infos par rapport à l'avatar actuel ( user connecté )
+        $modif = $this->Users->get($this->Auth->user('id'));
+        // $modif = $this->Users->find()->where(['id' => $u['id']]);
+        $this->set(compact('modif'));
+        // On copie l'ancien nom de fichier
+        $ancienNom = $modif->avatar;
+
+        // on copie en mémoire le nom de l'ancien fichier
+        $currentFileName = $modif->avatar;
+
+        // si on recoit un form
+        if ($this->request->is(['post', 'put'])) {
+            // on patch les données
+            $this->Users->patchEntity($modif, $this->request->getData());
+
+            // on recupere les infos par rapport à l'avatar actuel ( user connecté )
+            $modif = $this->Users->get($this->Auth->user('id'));
+            // si on a pas recu le fichier ou le format de l'image n est pas le bon
+            if (empty($this->request->getData()['picture']['name']) || !in_array($this->request->getData()['picture']['type'], ['image/png', 'image/jpg', 'image/jpeg', 'image/gif'])) {
+                // Flash error
+                $this->Flash->error('Format erroné. Autosié : png, pdf, gif');
+            } else {
+                // On recupere l extension --> pathinfo
+                $ext = pathinfo($this->request->getData()['picture']['name'], PATHINFO_EXTENSION);
+                // on creer le nouveau nom
+                $newName = 'event-' . $modif->id . '-' . time() . '.' . $ext;
+                // on deplace le fichier de la memoire temporaire vers le dossier avatars
+                move_uploaded_file($this->request->getData()['picture']['tmp_name'], WWW_ROOT . 'img/events/' . $newName);
+                // on remplace le npm de l'objet à sauvegarder
+                $modif->avatar = $newName;
+                // On essaie la sauvegarde (if else)
+                if ($this->Users->save($modif)) {
+                    $this->Flash->success('Image uploadée');
+                    // si l'ancien fichier existe --> !empty && file_exists
+                    if (!empty($ancienNom) && file_exists(WWW_ROOT . 'img/events/' . $ancienNom)) {
+                        unlink(WWW_ROOT . 'img/events/' . $ancienNom);
+                    }
+
+                    return $this->redirect(['action' => 'view', $modif->id]);
+                } else {
+                    $this->Flash->error('Modification impossible');
+                }
+            }
         }
     }
 

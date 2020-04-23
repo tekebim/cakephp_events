@@ -41,7 +41,7 @@
 </table>
 
 <?php if ($Auth->user('id') === $event->user_id) { ?>
-    <?= $this->Html->link('Modfier l\'événement', ['controller' => 'Events', 'action' => 'edit', $event->id], array('class' => 'button')); ?> &nbsp;
+    <?= $this->Html->link('Modifier les informations de l\'événement', ['controller' => 'Events', 'action' => 'edit', $event->id], array('class' => 'button')); ?> &nbsp;
     <?= $this->Html->link('Inviter des personnes', ['controller' => 'Events', 'action' => 'invite', $event->id], array('class' => 'button')); ?>
 <?php } ?>
 <hr>

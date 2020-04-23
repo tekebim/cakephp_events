@@ -5,7 +5,7 @@
     </figure>
 <?php } else { ?>
     <figure>
-        <?= $this->Html->image('default.png', ['alt' => 'Avatar par défaut']) ?>
+        <?= $this->Html->image('default-avatar.png', ['alt' => 'Avatar par défaut']) ?>
     </figure>
 <?php } ?>
 

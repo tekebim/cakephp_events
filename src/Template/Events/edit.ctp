@@ -20,8 +20,9 @@
     <?= $this->Form->control('beginning', ['label' => 'Date de l\'événement']); ?>
     <?= $this->Form->control('description', ['label' => 'Description']); ?>
     <?= $this->Form->control('location', ['label' => 'Lieu']); ?>
-    <?= $this->Form->button('Modifier vos informations') ?>
+    <?= $this->Form->button('Modifier les informations') ?>
+    <?= $this->Html->link('Supprimer l\'événément', ['action' => 'delete', $e->id],['confirm' => 'Êtes-vous sûr de vouloir supprimer cet événément ?'], array('class' => 'button')); ?>
 </fieldset>
 <?= $this->Form->end() ?>
 
-<?= $this->Html->link('Annuler', ['action' => 'view', $e->id]);
+<?= $this->Html->link('Annuler', ['action' => 'view', $e->id], array('class' => 'button')); ?>

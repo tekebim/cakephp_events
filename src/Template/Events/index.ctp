@@ -24,16 +24,16 @@
                 $eventTime = $value->beginning->i18nFormat('dd/MM/yyyy hh:mm');
 
                 if ($currentTime > $eventTime) {
-                    echo '<label class="label--incoming">A venir</label>';
-                } else {
                     echo '<label class="label--done">Terminé</label>';
+                } else {
+                    echo '<label class="label--incoming">A venir</label>';
                 }
                 ?>
 
                 <?= $value->beginning->i18nFormat('dd/MM/yyyy hh:mm') ?><?php $currentDate = date("d/m/yy H:i:s");
                 echo $currentDate; ?></td>
             <td><?= $value->location ?></td>
-            <td><?= $this->Html->link($value->user->login, ['action' => 'view', $value->user->id, 'controller' => 'Users']) ?></td>
+            <td><?= $this->Html->link($value->user->login, ['action' => 'view', $value->user->id, 'controller' => 'Users']) ?> - <?=$value->user->id?></td>
             <td><?= count($value->guests) ?></td>
             <td>
                 <?php if ($Auth->user('id') === $value->user->id) {

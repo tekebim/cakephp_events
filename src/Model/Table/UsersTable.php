@@ -24,8 +24,10 @@ class UsersTable extends Table
     {
         $v->notEmpty('login')
             ->notEmpty('password')
+            ->allowEmpty('picture')
             ->maxLength('login', 20)
-            ->maxLength('password', 150);
+            ->maxLength('password', 150)
+            ->add('picture', 'file');
         return $v;
     }
 }

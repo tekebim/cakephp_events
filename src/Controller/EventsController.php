@@ -19,6 +19,14 @@ class EventsController extends AppController
         $this->set(compact('events'));
     }
 
+    public function manage()
+    {
+        // Get the current user information
+        $u = $this->Auth->user();
+        $events = $this->Events->find()->where(['user_id' => $u['id']])->contain(['Users', 'Guests'])->order(['beginning' => 'DESC']);;
+        $this->set(compact('events'));
+    }
+
     public function view($id)
     {
         $event = $this->Events->get($id, ['contain' => ['Users', 'Guests.Users']]);
@@ -102,7 +110,7 @@ class EventsController extends AppController
                 $this->Flash->error('Erreur lors de la tentative de modification');
             }
         } else {
-            $this->Flash->error('Vous n\'êtes pas authorisé à modifier ce contenu');
+            $this->Flash->error('Vous n\'êtes pas autorisé à modifier ce contenu');
             return $this->redirect(['action' => 'index']);
         }
     }
@@ -216,5 +224,22 @@ class EventsController extends AppController
             // Error while trying to save
             $this->Flash->error('Une erreur est survenue. Veuillez réessayer.');
         }
+    }
+
+    public function delete($eventID)
+    {
+        $this->request->allowMethod('post', 'delete');
+        $u = $this->Auth->user();
+        $event = $this->Events->get($eventID);
+        if ($event->user_id === $u['id']) {
+            if ($this->Events->delete($event)) {
+                $this->Flash->success('L\'événement a bien été supprimé');
+                return $this->redirect(['action' => 'index']);
+            }
+            $this->Flash->error('Suppression de l\'événement impossible');
+            return $this->redirect(['action' => 'index']);
+        }
+        $this->Flash->error('Vous n\'êtes pas autorisé à effectuer cette action');
+        $this->redirect(['action' => 'view', $eventID]);
     }
 }

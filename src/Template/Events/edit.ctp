@@ -21,7 +21,7 @@
     <?= $this->Form->control('description', ['label' => 'Description']); ?>
     <?= $this->Form->control('location', ['label' => 'Lieu']); ?>
     <?= $this->Form->button('Modifier les informations') ?>
-    <?= $this->Html->link('Supprimer l\'événément', ['action' => 'delete', $e->id],['confirm' => 'Êtes-vous sûr de vouloir supprimer cet événément ?'], array('class' => 'button')); ?>
+    <?= $this->Form->postLink('Supprimer l\'événément', ['action' => 'delete', $e->id], ['confirm' => 'Êtes-vous sûr de vouloir supprimer cet événément ?']); ?>
 </fieldset>
 <?= $this->Form->end() ?>
 

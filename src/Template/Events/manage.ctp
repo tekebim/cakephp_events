@@ -1,4 +1,4 @@
-<h1>Events</h1>
+<h1>Mes événements</h1>
 
 <table>
     <thead>
@@ -7,7 +7,6 @@
         <th>Description</th>
         <th>Date</th>
         <th>Lieu</th>
-        <th>Créé par</th>
         <th>Invitations</th>
         <th>Status</th>
     </tr>
@@ -33,7 +32,6 @@
                 <?= $value->beginning->i18nFormat('dd/MM/yyyy hh:mm') ?><?php $currentDate = date("d/m/yy H:i:s");
                 echo $currentDate; ?></td>
             <td><?= $value->location ?></td>
-            <td><?= $this->Html->link($value->user->login, ['action' => 'view', $value->user->id, 'controller' => 'Users']) ?> - <?=$value->user->id?></td>
             <td><?= count($value->guests) ?></td>
             <td>
                 <?php if ($Auth->user('id') === $value->user->id) {

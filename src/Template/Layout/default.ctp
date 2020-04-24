@@ -45,6 +45,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             <li><?= $this->Html->link('Accueil', ['controller' => 'Dashboard', 'action' => 'index'], ['class' => ($this->templatePath == 'Dashboard' && $this->template == 'index') ? 'active' : ''])?></li>
             <li><?= $this->Html->link('Liste des événements', ['controller' => 'Events', 'action' => 'index'], ['class' => ($this->templatePath == 'Events' && $this->template == 'index') ? 'active' : '']); ?></li>
             <li><?= $this->Html->link('Mes événements', ['controller' => 'Events', 'action' => 'manage'], ['class' => ($this->templatePath == 'Events' && $this->template == 'manage') ? 'active' : '']); ?></li>
+            <li><?= $this->Html->link('Mes messages', ['controller' => 'Messages', 'action' => 'index'], ['class' => ($this->templatePath == 'Messages' && $this->template == 'index') ? 'active' : '']); ?></li>
             <li>
                 <a class="user__details">
                     <?php if (!empty($Auth->user('avatar'))) { ?>

@@ -4,6 +4,7 @@ namespace App\Model\Table;
 
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\ORM\RulesChecker;
 use Cake\Event\Event;
 
 class UsersTable extends Table
@@ -29,5 +30,11 @@ class UsersTable extends Table
             ->maxLength('password', 150)
             ->add('picture', 'file');
         return $v;
+    }
+
+    public function buildRules(RulesChecker $rules)
+    {
+        $rules->add($rules->isUnique(['login'], 'Nom d\'utilisateur déjà utilisé. Veuillez saisir un nouveau nom d\'utilisateur.'));
+        return $rules;
     }
 }

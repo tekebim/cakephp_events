@@ -41,7 +41,7 @@
 </table>
 
 <?php
-if (!$Auth->user('id') === $event->user->id) {
+if ($Auth->user('id') !== $event->user->id) {
     $guestsId = [];
     foreach ($event->guests as $guest) {
         array_push($guestsId, $guest['user_id']);

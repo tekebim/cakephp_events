@@ -62,13 +62,7 @@
         <?php foreach ($user->events as $event) { ?>
             <tr>
                 <td><?= $event->title ?></td>
-                <td>
-                    <?php
-                        $currentTime = new DateTime();
-                        $eventTime = new DateTime($event->beginning);
-                    ?>
-                    <?= $this->IntervalTime->createLabel($currentTime, $eventTime) ?>
-                </td>
+                <td><?= $this->IntervalTime->createLabel($event->beginning) ?></td>
                 <td><?= $event->location ?></td>
                 <td><?= $event->user->login ?></td>
             </tr>

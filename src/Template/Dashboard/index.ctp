@@ -14,20 +14,14 @@
             </tr>
             </thead>
             <tbody>
-            <?php foreach ($events as $key => $value) { ?>
+            <?php foreach ($events as $event) { ?>
                 <tr>
-                    <td><?= $this->Html->link($value->title, ['controller' => 'Events', 'action' => 'view', $value->id]) ?></td>
-                    <td><?= $this->Text->truncate(strip_tags($value->description), 50, ['ellipsis' => '...']) ?>
+                    <td><?= $this->Html->link($event->title, ['controller' => 'Events', 'action' => 'view', $event->id]) ?></td>
+                    <td><?= $this->Text->truncate(strip_tags($event->description), 50, ['ellipsis' => '...']) ?>
                     </td>
-                    <td>
-                        <?php
-                        $currentTime = new DateTime();
-                        $eventTime = new DateTime($value->beginning);
-                        ?>
-                        <?= $this->IntervalTime->createLabel($currentTime, $eventTime) ?>
-                    </td>
-                    <td><?= $value->location ?></td>
-                    <td><?= count($value->guests) ?></td>
+                    <td><?= $this->IntervalTime->createLabel($event->beginning) ?></td>
+                    <td><?= $event->location ?></td>
+                    <td><?= count($event->guests) ?></td>
                 </tr>
             <?php } ?>
             </tbody>

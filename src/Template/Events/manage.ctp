@@ -12,30 +12,17 @@
     </tr>
     </thead>
     <tbody>
-    <?php foreach ($events as $key => $value) { ?>
+    <?php foreach ($events as $event) { ?>
         <tr>
-            <td><?= $this->Html->link($value->title, ['controller' => 'Events', 'action' => 'view', $value->id]) ?></td>
-            <td><?= $this->Text->truncate(strip_tags($value->description), 50, ['ellipsis' => '...']) ?>
+            <td><?= $this->Html->link($event->title, ['controller' => 'Events', 'action' => 'view', $event->id]) ?></td>
+            <td><?= $this->Text->truncate(strip_tags($event->description), 50, ['ellipsis' => '...']) ?>
             </td>
+            <td><?= $this->IntervalTime->createLabel($event->beginning) ?></td>
+            <td><?= $event->location ?></td>
+            <td><?= count($event->guests) ?></td>
             <td>
-                <?php
-                $currentTime = date("d/m/yy H:i");
-                $eventTime = $value->beginning->i18nFormat('dd/MM/yyyy hh:mm');
-
-                if ($currentTime > $eventTime) {
-                    echo '<label class="label--done">Terminé</label>';
-                } else {
-                    echo '<label class="label--incoming">A venir</label>';
-                }
-                ?>
-
-                <?= $value->beginning->i18nFormat('dd/MM/yyyy hh:mm') ?><?php $currentDate = date("d/m/yy H:i:s");
-                echo $currentDate; ?></td>
-            <td><?= $value->location ?></td>
-            <td><?= count($value->guests) ?></td>
-            <td>
-                <?php if ($Auth->user('id') === $value->user->id) {
-                    echo $this->Html->link('Gérer', ['action' => 'edit', $value->id], array('class' => 'button'));
+                <?php if ($Auth->user('id') === $event->user->id) {
+                    echo $this->Html->link('Gérer', ['action' => 'edit', $event->id], array('class' => 'button'));
                 }
                 ?>
             </td>

@@ -13,24 +13,19 @@
     </tr>
     </thead>
     <tbody>
-    <?php foreach ($events as $key => $value) { ?>
+    <?php foreach ($events as $event) { ?>
         <tr>
-            <td><?= $this->Html->link($value->title, ['controller' => 'Events', 'action' => 'view', $value->id]) ?></td>
-            <td><?= $this->Text->truncate(strip_tags($value->description), 50, ['ellipsis' => '...']) ?>
+            <td><?= $this->Html->link($event->title, ['controller' => 'Events', 'action' => 'view', $event->id]) ?></td>
+            <td><?= $this->Text->truncate(strip_tags($event->description), 50, ['ellipsis' => '...']) ?>
             </td>
+            <td><?= $this->IntervalTime->createLabel($event->beginning) ?></td>
+            <td><?= $event->location ?></td>
+            <td><?= $this->Html->link($event->user->login, ['action' => 'view', $event->user->id, 'controller' => 'Users']) ?>
+                - <?= $event->user->id ?></td>
+            <td><?= count($event->guests) ?></td>
             <td>
-                <?php
-                $currentTime = new DateTime();
-                $eventTime = new DateTime($value->beginning);
-                ?>
-                <?= $this->IntervalTime->createLabel($currentTime, $eventTime) ?>
-            </td>
-            <td><?= $value->location ?></td>
-            <td><?= $this->Html->link($value->user->login, ['action' => 'view', $value->user->id, 'controller' => 'Users']) ?> - <?=$value->user->id?></td>
-            <td><?= count($value->guests) ?></td>
-            <td>
-                <?php if ($Auth->user('id') === $value->user->id) {
-                    echo $this->Html->link('Gérer', ['action' => 'edit', $value->id], array('class' => 'button'));
+                <?php if ($Auth->user('id') === $event->user->id) {
+                    echo $this->Html->link('Gérer', ['action' => 'edit', $event->id], array('class' => 'button'));
                 }
                 ?>
             </td>

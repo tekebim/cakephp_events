@@ -21,18 +21,11 @@
                     </td>
                     <td>
                         <?php
-                        $currentTime = date("d/m/yy H:i");
-                        $eventTime = $value->beginning->i18nFormat('dd/MM/yyyy hh:mm');
-
-                        if ($currentTime > $eventTime) {
-                            echo '<label class="label--done">Terminé</label>';
-                        } else {
-                            echo '<label class="label--incoming">A venir</label>';
-                        }
+                        $currentTime = new DateTime();
+                        $eventTime = new DateTime($value->beginning);
                         ?>
-
-                        <?= $value->beginning->i18nFormat('dd/MM/yyyy hh:mm') ?><?php $currentDate = date("d/m/yy H:i:s");
-                        echo $currentDate; ?></td>
+                        <?= $this->IntervalTime->createLabel($currentTime, $eventTime) ?>
+                    </td>
                     <td><?= $value->location ?></td>
                     <td><?= count($value->guests) ?></td>
                 </tr>
@@ -68,9 +61,9 @@
     </div>
     <div class="col-4">
         <h2>TOP 5 des invités</h2>
-        <?php if (!empty($guests)) { ?>
+        <?php if (!empty($invated)) { ?>
             <ul>
-                <?php foreach ($lastusers as $user) { ?>
+                <?php foreach ($invated as $user) { ?>
                     <li><?= $user ?></li>
                 <?php } ?>
             </ul>

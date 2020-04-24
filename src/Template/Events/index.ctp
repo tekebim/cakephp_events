@@ -20,18 +20,11 @@
             </td>
             <td>
                 <?php
-                $currentTime = date("d/m/yy H:i");
-                $eventTime = $value->beginning->i18nFormat('dd/MM/yyyy hh:mm');
-
-                if ($currentTime > $eventTime) {
-                    echo '<label class="label--done">Terminé</label>';
-                } else {
-                    echo '<label class="label--incoming">A venir</label>';
-                }
+                $currentTime = new DateTime();
+                $eventTime = new DateTime($value->beginning);
                 ?>
-
-                <?= $value->beginning->i18nFormat('dd/MM/yyyy hh:mm') ?><?php $currentDate = date("d/m/yy H:i:s");
-                echo $currentDate; ?></td>
+                <?= $this->IntervalTime->createLabel($currentTime, $eventTime) ?>
+            </td>
             <td><?= $value->location ?></td>
             <td><?= $this->Html->link($value->user->login, ['action' => 'view', $value->user->id, 'controller' => 'Users']) ?> - <?=$value->user->id?></td>
             <td><?= count($value->guests) ?></td>

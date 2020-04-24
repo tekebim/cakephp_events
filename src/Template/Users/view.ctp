@@ -46,7 +46,8 @@
 
 <?php if (count($user->events) > 0) { ?>
 
-    <h2><?= count($user->events) > 1 ? 'Les événements' : 'L\'événement'; ?> de <strong><?= $user->login ?></strong> :</h2>
+    <h2><?= count($user->events) > 1 ? 'Les événements' : 'L\'événement'; ?> de <strong><?= $user->login ?></strong> :
+    </h2>
 
     <table>
         <thead>
@@ -63,18 +64,11 @@
                 <td><?= $event->title ?></td>
                 <td>
                     <?php
-                    $currentTime = date("d/m/yy H:i");
-                    $eventTime = $event->beginning->i18nFormat('dd/MM/yyyy hh:mm');
-
-                    if ($currentTime > $eventTime) {
-                        echo '<label class="label--done">Terminé</label>';
-                    } else {
-                        echo '<label class="label--incoming">A venir</label>';
-                    }
+                        $currentTime = new DateTime();
+                        $eventTime = new DateTime($event->beginning);
                     ?>
-
-                    <?= $event->beginning->i18nFormat('dd/MM/yy') ?>
-                    à <?= $event->beginning->i18nFormat('hh:mm') ?></td>
+                    <?= $this->IntervalTime->createLabel($currentTime, $eventTime) ?>
+                </td>
                 <td><?= $event->location ?></td>
                 <td><?= $event->user->login ?></td>
             </tr>

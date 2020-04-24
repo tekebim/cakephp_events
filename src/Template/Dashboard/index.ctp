@@ -30,11 +30,14 @@
 </div>
 <div class="row">
     <div class="col-4">
-        <h2>Dernier(s) utilisateur(s) connecté(s)</h2>
+        <h2>Utilisateur(s) actif(s)</h2>
         <?php if (!empty($lastusers)) { ?>
             <ul>
                 <?php foreach ($lastusers as $user) { ?>
-                    <li><?= $user ?></li>
+                    <li><?= $this->Html->link($user->login, ['controller' => 'Users', 'action' => 'view', $user->id]) ?>
+                        <br/>Connexion à <?= $user->lastin ?>
+                        <br/>Déconnecté à <?= $user->lastout ?>
+                    </li>
                 <?php } ?>
             </ul>
         <?php } else { ?>
@@ -42,13 +45,13 @@
         <?php } ?>
     </div>
     <div class="col-4">
-        <h2>TOP 5 créateur d'événement</h2>
-        <?php if (!empty($lastusers)) { ?>
-            <ul>
-                <?php foreach ($lastusers as $user) { ?>
-                    <li><?= $user ?></li>
+        <h2>Top contributeurs</h2>
+        <?php if (!empty($contributors)) { ?>
+            <ol>
+                <?php foreach ($contributors as $user) { ?>
+                    <li><?= $this->Html->link($user->user->login, ['controller' => 'Users', 'action' => 'view', $user->user_id]) ?> : <?= $user->count ?> moocs</li>
                 <?php } ?>
-            </ul>
+            </ol>
         <?php } else { ?>
             <p>Aucun utilisateur récemment</p>
         <?php } ?>
@@ -56,11 +59,11 @@
     <div class="col-4">
         <h2>TOP 5 des invités</h2>
         <?php if (!empty($invated)) { ?>
-            <ul>
+            <ol>
                 <?php foreach ($invated as $user) { ?>
-                    <li><?= $user ?></li>
+                    <li><?= $this->Html->link($user->user->login, ['controller' => 'Users', 'action' => 'view', $user->user_id]) ?> : <?= $user->count ?> invitations</li>
                 <?php } ?>
-            </ul>
+            </ol>
         <?php } else { ?>
             <p>Aucun utilisateur récemment</p>
         <?php } ?>

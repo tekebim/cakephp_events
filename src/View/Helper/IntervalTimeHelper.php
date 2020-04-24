@@ -13,12 +13,23 @@ class IntervalTimeHelper extends Helper
         $eventTime = $eventBeginning;
         $interval = $eventTime->diff($currentTime);
 
-        $intY = ($interval->y) > 0 ? $interval->format('%y an, ') : '';
-        $intM = ($interval->m) > 0 ? $interval->format('%m mois et ') : '';
-        $intD = ($interval->d) > 0 ? $interval->format('%d jours') : '';
+        $intY = ($interval->y) > 0 ? $interval->format('%y') : null;
+        $intM = ($interval->m) > 0 ? $interval->format('%m') : null;
+        $intD = ($interval->d) > 0 ? $interval->format('%d') : null;
+
+
+        if($intY != null){
+            $intY > 1 ? $intY  = $intY . ' ans, ' : $intY  = $intY . ' an, ';
+        }
+        if($intM != null){
+            $intM > 1 ? $intM  = $intM . ' mois et ' : $intM  = $intM . ' mois et ';
+        }
+        if($intD != null){
+            $intD > 1? $intD  = $intD . ' jours' : $intD  = $intD . ' jour';
+        }
 
         if ($eventTime->isToday()) {
-            echo '<label class="label label--today">Today</label>';
+            echo '<label class="label label--today">Aujourd\'hui</label>';
             return;
         }
 

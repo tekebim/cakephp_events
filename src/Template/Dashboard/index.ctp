@@ -34,14 +34,20 @@
         <?php if (!empty($lastusers)) { ?>
             <ul>
                 <?php foreach ($lastusers as $user) { ?>
+                    <?php
+                    $currentTime = new DateTime('now');
+                    $interval = $user->lastin->diff($currentTime);
+                    $intM = ($interval->i) > 0 ? $interval->format('%i') : '';
+                    ?>
                     <li><?= $this->Html->link($user->login, ['controller' => 'Users', 'action' => 'view', $user->id]) ?>
-                        <br/>Connexion à <?= $user->lastin ?>
+                        <br/>connecté depuis
+                        <?= $intM > 1 ? $intM . ' minutes' : $intM . ' minute' ?>
                         <br/>Déconnecté à <?= $user->lastout ?>
                     </li>
                 <?php } ?>
             </ul>
         <?php } else { ?>
-            <p>Aucun utilisateur récemment</p>
+            <p>Aucun utilisateur actif récemment</p>
         <?php } ?>
     </div>
     <div class="col-4">
@@ -49,7 +55,9 @@
         <?php if (!empty($contributors)) { ?>
             <ol>
                 <?php foreach ($contributors as $user) { ?>
-                    <li><?= $this->Html->link($user->user->login, ['controller' => 'Users', 'action' => 'view', $user->user_id]) ?> : <?= $user->count ?> moocs</li>
+                    <li><?= $this->Html->link($user->user->login, ['controller' => 'Users', 'action' => 'view', $user->user_id]) ?>
+                        : <?= $user->count ?> moocs
+                    </li>
                 <?php } ?>
             </ol>
         <?php } else { ?>
@@ -61,7 +69,9 @@
         <?php if (!empty($invated)) { ?>
             <ol>
                 <?php foreach ($invated as $user) { ?>
-                    <li><?= $this->Html->link($user->user->login, ['controller' => 'Users', 'action' => 'view', $user->user_id]) ?> : <?= $user->count ?> invitations</li>
+                    <li><?= $this->Html->link($user->user->login, ['controller' => 'Users', 'action' => 'view', $user->user_id]) ?>
+                        : <?= $user->count ?> invitations
+                    </li>
                 <?php } ?>
             </ol>
         <?php } else { ?>

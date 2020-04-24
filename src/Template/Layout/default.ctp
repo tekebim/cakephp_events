@@ -42,7 +42,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             <?= $this->Html->link('Se connecter', ['controller' => 'Users', 'action' => 'login'], ['class' => ($this->templatePath == 'Users' && $this->template == 'login') ? 'active' : '']); ?>
             <?= $this->Html->link('Créer un compte', ['controller' => 'Users', 'action' => 'add'], ['class' => ($this->templatePath == 'Users' && $this->template == 'add') ? 'active' : '']); ?>
         <?php } else { ?>
-            <li>Accueil</li>
+            <li><?= $this->Html->link('Accueil', ['controller' => 'Dashboard', 'action' => 'index'], ['class' => ($this->templatePath == 'Dashboard' && $this->template == 'index') ? 'active' : ''])?></li>
             <li><?= $this->Html->link('Liste des événements', ['controller' => 'Events', 'action' => 'index'], ['class' => ($this->templatePath == 'Events' && $this->template == 'index') ? 'active' : '']); ?></li>
             <li><?= $this->Html->link('Mes événements', ['controller' => 'Events', 'action' => 'manage'], ['class' => ($this->templatePath == 'Events' && $this->template == 'manage') ? 'active' : '']); ?></li>
             <li>

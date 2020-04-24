@@ -24,9 +24,24 @@
                 - <?= $event->user->id ?></td>
             <td><?= count($event->guests) ?></td>
             <td>
-                <?php if ($Auth->user('id') === $event->user->id) {
+                <?php
+                if ($Auth->user('id') === $event->user->id) {
                     echo $this->Html->link('Gérer', ['action' => 'edit', $event->id], array('class' => 'button'));
                 }
+                else {
+                    $guestsId = [];
+                    foreach ($event->guests as $guest) {
+                        array_push($guestsId, $guest['user_id']);
+                    }
+                    if (in_array($Auth->user('id'), $guestsId)) {
+                        echo 'invité';
+                    }
+                    else {
+                        echo $this->Html->link('Demande invitation', ['controller' => 'Messages', 'action' => 'request', $event->id], array('class' => 'button'));
+                    }
+                }
+
+
                 ?>
             </td>
         </tr>

@@ -12,7 +12,7 @@
     $this->Form->control('user_id', [
         'type' => 'select',
         'label' => 'Choisissez parmi les utilisateurs :',
-        'multiple' => false,
+        'multiple' => true,
         'empty' => '(choisissez)',
         'options' => $users
     ]);

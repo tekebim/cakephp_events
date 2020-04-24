@@ -40,6 +40,19 @@
     </tbody>
 </table>
 
+<?php
+if (!$Auth->user('id') === $event->user->id) {
+    $guestsId = [];
+    foreach ($event->guests as $guest) {
+        array_push($guestsId, $guest['user_id']);
+    }
+    if (in_array($Auth->user('id'), $guestsId)) {
+        echo 'Vous participez déjà à cet événement';
+    } else {
+        echo $this->Html->link('Demande invitation', ['controller' => 'Messages', 'action' => 'request', $event->id], array('class' => 'button'));
+    }
+}
+?>
 <?php if ($Auth->user('id') === $event->user_id) { ?>
     <?= $this->Html->link('Modifier les informations de l\'événement', ['controller' => 'Events', 'action' => 'edit', $event->id], array('class' => 'button')); ?> &nbsp;
     <?= $this->Html->link('Inviter des personnes', ['controller' => 'Events', 'action' => 'invite', $event->id], array('class' => 'button')); ?>

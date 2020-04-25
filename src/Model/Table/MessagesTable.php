@@ -30,12 +30,9 @@ class MessagesTable extends Table
 
     public function validationDefault(Validator $v)
     {
-        $v->notEmpty('login')
-            ->notEmpty('password')
-            ->allowEmpty('picture')
-            ->maxLength('login', 20)
-            ->maxLength('password', 150)
-            ->add('picture', 'file');
+        $v->notEmpty('sender_id')
+            ->notEmpty('receiver_id')
+            ->notEmpty('content');
         return $v;
     }
 }

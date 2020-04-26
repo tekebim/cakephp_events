@@ -32,7 +32,9 @@ class MessagesTable extends Table
     {
         $v->notEmpty('sender_id')
             ->notEmpty('receiver_id')
-            ->notEmpty('content');
+            ->allowEmpty('event_id')
+            ->notEmpty('content')
+            ->notEmpty('type');
         return $v;
     }
 }

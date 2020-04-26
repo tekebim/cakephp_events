@@ -7,12 +7,14 @@
 <fieldset>
     <legend>Recherche d'utilisateur</legend>
     <!--<?= $this->Form->control('user_id', ['label' => 'Nom d\'utilisateur', 'type' => 'text']); ?>-->
+    <?= $this->Form->control('event_id', ['type' => 'text', 'value' => $event->id]); ?>
+    <?= $this->Form->control('status', ['type' => 'text', 'value' => 'validated']); ?>
     <?=
     // Select multiple pour belongsToMany
     $this->Form->control('user_id', [
         'type' => 'select',
         'label' => 'Choisissez parmi les utilisateurs :',
-        'multiple' => false,
+        'multiple' => true,
         'empty' => '(choisissez)',
         'options' => $users
     ]);

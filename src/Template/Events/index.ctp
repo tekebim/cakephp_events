@@ -50,5 +50,5 @@
     <?php } ?>
     </tbody>
 </table>
-
+<?= $this->element('pagination', []); ?>
 <?= $this->Html->link('Créer un nouvel événement', ['action' => 'add'], array('class' => 'button')); ?>

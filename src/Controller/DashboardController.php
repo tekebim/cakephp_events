@@ -7,6 +7,14 @@ use Cake\I18n\Time;
 
 class DashboardController extends AppController
 {
+
+    public $paginate = [
+        'limit' => 5,
+        'order' => [
+            'Events.beginning' => 'asc'
+        ]
+    ];
+
     public function initialize()
     {
         parent::initialize();
@@ -23,6 +31,7 @@ class DashboardController extends AppController
         /*
          * Query all events
         */
+
         $events = $this->Events->find()->contain(['Users', 'Guests'])->order(['beginning' => 'DESC'])->limit(5);
 
         /*
@@ -36,6 +45,7 @@ class DashboardController extends AppController
         $lastusers = $this->Users->find()
             ->select(['Users.id', 'Users.login', 'Users.lastin', 'Users.lastout'])
             ->where(['lastin >' => $timePeriodMax])
+            // ->andWhere(['lastout >' => $timePeriodMax])
             ->order(['lastin' => 'DESC'])
             ->limit(5);
 
@@ -67,6 +77,7 @@ class DashboardController extends AppController
             ->limit(5);
 
         // Share to view
-        $this->set(compact('events', 'lastusers', 'invated', 'contributors'));
+        $this->set(compact('lastusers', 'invated', 'contributors'));
+        $this->set('events', $this->paginate($events));
     }
 }

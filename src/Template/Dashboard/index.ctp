@@ -26,22 +26,26 @@
             <?php } ?>
             </tbody>
         </table>
+
+        <?= $this->element('pagination', []); ?>
     </div>
 </div>
 <div class="row">
     <div class="col-4">
-        <h2>Utilisateur(s) actif(s)</h2>
+        <h2>Utilisateur(s) connecté(s)</h2>
+        <h3>Dans les 30 dernières minutes</h3>
         <?php if (!empty($lastusers)) { ?>
             <ul>
                 <?php foreach ($lastusers as $user) { ?>
                     <?php
                     $currentTime = new DateTime('now');
                     $interval = $user->lastin->diff($currentTime);
-                    $intM = ($interval->i) > 0 ? $interval->format('%i') : '';
+                    $intM = ($interval->i) > 0 ? $interval->format('%i') : 0;
                     ?>
                     <li><?= $this->Html->link($user->login, ['controller' => 'Users', 'action' => 'view', $user->id]) ?>
                         <br/>connecté depuis
                         <?= $intM > 1 ? $intM . ' minutes' : $intM . ' minute' ?>
+                        <br/>Connecté à <?= $user->lastin ?>
                         <br/>Déconnecté à <?= $user->lastout ?>
                     </li>
                 <?php } ?>

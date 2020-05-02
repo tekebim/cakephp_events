@@ -10,7 +10,7 @@ module.exports = merge(common, {
   bail: true,
   output: {
     filename: 'js/[name].js',
-    chunkFilename: 'js/[name].chunk.js'
+    // chunkFilename: 'js/[name].chunk.js'
   },
   plugins: [
     new Webpack.DefinePlugin({

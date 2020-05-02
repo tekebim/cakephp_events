@@ -1,7 +1,10 @@
-$body-color: slateblue;
+@charset "utf-8";
+@import 'abstracts/variables';
+// Bootstrap 4
+@import 'vendors/bootstrap/custom';
 
-body {
-    color: $body-color;
-    background-color: $body-color;
-    font-family: sans-serif;
-}
+// Base
+@import 'base/utils/mixins';
+@import 'base/utils/utils';
+@import 'base/fonts';
+@import 'base/base';

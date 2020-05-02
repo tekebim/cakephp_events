@@ -65,6 +65,6 @@
 
 
 <?= $this->Html->link('Mettre à jour mes informations', ['action' => 'edit']); ?>
-
+<?= $this->Form->postLink('Supprimer mon compte', ['controller' => 'Users', 'action' => 'delete'], ['confirm' => 'Etes-vous sûr ?'], ['class' => 'btn']); ?>
 
 <p><?= $this->Html->link('Retour à la page d\'accueil', ['action' => 'index', 'controller' => 'dashboard']); ?></p>

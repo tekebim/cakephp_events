@@ -11,7 +11,7 @@ class MessagesController extends AppController
         parent::initialize();
     }
 
-    public function index()
+    public function old_index()
     {
         $messages = $this->Messages->find()->contain(['Sender', 'Receiver']);
         $messages
@@ -52,10 +52,148 @@ class MessagesController extends AppController
         $this->set(compact('messages'));
     }
 
-    public function request($eventID)
+    public function index()
+    {
+        // Query from all message to get conversation_id of current user
+        $messages = $this->Messages->find()
+            ->contain([
+                'Sender',
+                'Receiver'
+            ])
+            ->where(['Messages.receiver_id' => $this->Auth->user('id')])
+            ->orWhere(['Messages.sender_id' => $this->Auth->user('id')]);
+
+        $messages->select(
+            [
+                'count' => $messages->func()->count('Messages.conversation_id'),
+                'Messages.conversation_id'
+            ]
+        )
+            ->group('Messages.conversation_id');
+
+        $resultSet = $messages->all();
+
+        // Create empty array
+        $test = [];
+        // While result from previous conversation
+        while ($resultSet->valid()) {
+            // The current vlue
+            $results = $resultSet->current();
+            // Request the last message from all messages with this conversation ID
+            $one = $this->Messages->find()
+                ->contain([
+                    'Sender',
+                    'Receiver'
+                ])
+                ->select(
+                    [
+                        'Messages.conversation_id',
+                        'Messages.id',
+                        'Messages.type',
+                        'Messages.content',
+                        'Messages.sender_id',
+                        'Messages.receiver_id',
+                        'Messages.created',
+                        'Sender.id',
+                        'Sender.login',
+                        'Receiver.id',
+                        'Receiver.login',
+                    ]
+                )
+                ->where(['Messages.conversation_id' => $results->conversation_id])
+                ->order(['Messages.created' => 'DESC'])
+                ->limit(1)
+                ->toArray();
+
+            // Add this result to array
+            array_push($test, $one);
+            // Go to to next result
+            $resultSet->next();
+        }
+        // Share array to view
+        $this->set(compact('test'));
+
+        /*
+        foreach ($messages as $message){
+            $test = $this->Messages->find()
+                ->contain([
+                    'Sender',
+                    'Receiver'
+                ]);
+            $test->select(
+                [
+                    // 'count' => $messages->func()->count('Messages.conversation_id'),
+                    'Messages.conversation_id',
+                    'Messages.id',
+                    'Messages.type',
+                    'Messages.content',
+                    'Messages.sender_id',
+                    'Messages.receiver_id',
+                    'Messages.created',
+                    'Sender.login',
+                    'Receiver.login',
+                ]
+            )
+            ->where(['Messages.conversation_id' => $message->conversation_id])
+            ->order(['Messages.created' => 'DESC'])
+            ->limit(1);
+        }
+        */
+
+        /*
+        $messages
+            ->select([
+                'count' => $messages->func()->count('Messages.conversation_id'),
+                'Messages.conversation_id'
+            ])
+            ->group('Messages.conversation_id')
+            ->order(['Messages.created' => 'DESC'])
+            ->limit(1);
+        */
+
+
+        $this->set(compact('messages'));
+    }
+
+    public function conversation($id)
     {
 
+        // Query from all message to get conversation_id of current user
+        $messages = $this->Messages->find()
+            ->contain([
+                'Sender',
+                'Receiver'
+            ])
+            ->where(['Messages.conversation_id' => $id])
+            ->andWhere(['OR' => [
+                'Messages.sender_id' => $this->Auth->user()['id'],
+                'Messages.receiver_id' => $this->Auth->user()['id']
+            ]])
+            //->andWhere(['Messages.sender_id OR Messages.receiver_id' => $this->Auth->user()['id']])
+            ->select(
+                [
+                    'Messages.conversation_id',
+                    'Messages.content',
+                    'Sender.login',
+                    'Sender.id',
+                    'Receiver.login',
+                    'Receiver.id',
+                ]
+            );
+
+        if (!$messages->isEmpty()) {
+            $this->set(compact('messages'));
+        } else {
+            $this->Flash->error('Impossible de charger la conversation demandée');
+            return $this->redirect(['controller' => 'Messages', 'action' => 'index']);
+        }
+
+    }
+
+    public function request($eventID)
+    {
         $this->loadModel('Guests');
+        $this->loadModel('Conversations');
 
         $n = $this->Messages->newEntity();
         $this->set(compact('n'));
@@ -71,12 +209,46 @@ class MessagesController extends AppController
                 // Pass current Auth user ID as sender_id
                 $n->sender_id = $this->Auth->user()['id'];
                 // Determine receiver_id
-                $n->receiver_id = $_POST['receiver_id'];
+                $n->receiver_id = intval($_POST['receiver_id']);
                 $n->event_id = $eventID;
                 $n->type = 'request';
 
-                $i = $this->Guests->newEntity();
+                $conversation = $this->Conversations->find()
+                    ->select(['id'])
+                    ->andWhere(['AND' => [
+                        'Conversations.user1_id' => $n->sender_id,
+                        'Conversations.user2_id' => $n->receiver_id
+                    ]])
+                    ->orWhere(['AND' => [
+                        'Conversations.user1_id' => $n->receiver_id,
+                        'Conversations.user2_id' => $n->sender_id
+                    ]]);
 
+                // If no results found in conversations table
+                if($conversation->isEmpty()){
+                    // Prepare data
+                    $data = $this->Conversations->newEntity();
+                    $data->user1_id = $n->sender_id;
+                    $data->user2_id = $n->receiver_id;
+                    // Passed data and try to save new record
+                    if( $result = $this->Conversations->save($data) ) {
+                        echo 'save ok';
+                        $conversationId=$result->id;
+                    }
+                    else {
+                        $this->Flash->error('Une erreur est survenue. Veuillez réessayer.');
+                        return;
+                    }
+                    // We need to create a new conversation
+                }
+                else {
+                    $element = $conversation->first();
+                    $conversationId = $element->id;
+                }
+
+                $n->conversation_id = $conversationId;
+
+                $i = $this->Guests->newEntity();
                 $i->user_id = $n->sender_id;
                 $i->event_id = $n->event_id;
                 $i->status = 'pending';

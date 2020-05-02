@@ -14,18 +14,11 @@
 <table>
     <tbody>
     <tr>
-        <td>Avatar : <strong><?= $user->avatar ?></strong></td>
-    </tr>
-    <tr>
         <td>Pseudo : <strong><?= $user->login ?></strong></td>
     </tr>
     <tr>
         <td>Membre depuis le : <?= $user->created->i18nFormat('dd/MM/yy') ?>
             à <?= $user->created->i18nFormat('hh:mm') ?></td>
-    </tr>
-    <tr>
-        <td>Dernière modification : <?= $user->modified->i18nFormat('dd/MM/yy') ?>
-            à <?= $user->modified->i18nFormat('hh:mm') ?></td>
     </tr>
     <?php if (!empty($user->lastin)) { ?>
         <tr>
@@ -44,34 +37,33 @@
     </tbody>
 </table>
 
-<?php if (count($user->events) > 0) { ?>
+<?php if (count($user->events) > 0) {
 
-    <h2><?= count($user->events) > 1 ? 'Les événements' : 'L\'événement'; ?> de <strong><?= $user->login ?></strong> :
-    </h2>
+    // Filter from array of all events, the events with beginning date's finished
+    $eventsDone = array_filter($user->events, function ($v) {
+        return ($v->beginning < new DateTime());
+    });
+    // Build list of upcoming events base on difference with original array and eventsDone
+    $eventsUpcomming = array_diff($user->events, $eventsDone);
+    ?>
 
-    <table>
-        <thead>
-        <tr>
-            <th>Nom de l'événément</th>
-            <th>Date de l'événément</th>
-            <th>Lieu de l'événément</th>
-            <th>Organisé par</th>
-        </tr>
-        </thead>
-        <tbody>
-        <?php foreach ($user->events as $event) { ?>
-            <tr>
-                <td><?= $event->title ?></td>
-                <td><?= $this->IntervalTime->createLabel($event->beginning) ?></td>
-                <td><?= $event->location ?></td>
-                <td><?= $event->user->login ?></td>
-            </tr>
-        <?php } ?>
-        </tbody>
-    </table>
+    <?= $this->element('eventstable', [
+        'titleType' => 'h2',
+        'titleContent' => (count($eventsUpcomming) > 1 ? 'Les prochains événéments' : 'Le prochain événément') . ' de <strong>' . $user->login . '</strong> :',
+        'sourceArray' => $eventsUpcomming,
+    ]); ?>
+
+    <?= $this->element('eventstable', [
+        'titleType' => 'h2',
+        'titleContent' => (count($eventsDone) > 1 ? 'Les événements auxquels' : 'L\'événement auquel') . ' à participé <strong>' . $user->login . '</strong> :',
+        'sourceArray' => $eventsDone,
+    ]); ?>
+
 <?php } else { ?>
     <h2>Aucune participation à un événement</h2>
 <?php } ?>
+
+
 <?= $this->Html->link('Mettre à jour mes informations', ['action' => 'edit']); ?>
 
 

@@ -8,18 +8,19 @@ use Cake\I18n\Time;
 class DashboardController extends AppController
 {
 
+    public function initialize()
+    {
+        parent::initialize();
+        $this->Auth->allow(['index']);
+
+    }
+
     public $paginate = [
         'limit' => 5,
         'order' => [
             'Events.beginning' => 'asc'
         ]
     ];
-
-    public function initialize()
-    {
-        parent::initialize();
-        $this->Auth->allow(['index']);
-    }
 
     public function index()
     {

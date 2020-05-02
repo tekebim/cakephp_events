@@ -46,7 +46,8 @@ class DashboardController extends AppController
         $lastusers = $this->Users->find()
             ->select(['Users.id', 'Users.login', 'Users.lastin', 'Users.lastout'])
             ->where(['lastin > lastout'])
-            ->where(['lastin >' => $timePeriodMax])
+            ->orWhere(['lastout IS NULL'])
+            ->andWhere(['lastin >' => $timePeriodMax])
             ->order(['lastin' => 'DESC'])
             ->limit(5);
 

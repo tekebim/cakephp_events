@@ -44,7 +44,12 @@
                     ?>
                     <li><?= $this->Html->link($user->login, ['controller' => 'Users', 'action' => 'view', $user->id]) ?>
                         <br/>connecté depuis
-                        <?= $intM > 1 ? $intM . ' minutes' : $intM . ' minute' ?>
+                        <?php if ($intM > 0) { ?>
+                            <?= $intM > 1 ? $intM . ' minutes' : $intM . ' minute'; ?>
+                        <?php }
+                        else { ?>
+                            moins d'une minute
+                        <?php } ?>
                         <br/>Connecté à <?= $user->lastin ?>
                         <br/>Déconnecté à <?= $user->lastout ?>
                     </li>

@@ -27,8 +27,6 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <?= $this->Html->meta('icon') ?>
 
     <?= $this->Html->css('https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css') ?>
-    <?= $this->Html->css('base.css') ?>
-    <?= $this->Html->css('style.css') ?>
     <?= $this->Html->css('main.css') ?>
 
     <?= $this->Html->script('https://cdn.jsdelivr.net/npm/choices.js@9.0.1/public/assets/scripts/choices.min.js') ?>
@@ -41,8 +39,19 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 </head>
 <body>
 
-<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
-    <?= $this->Html->link('GEEKUP', ['controller' => 'Dashboard', 'action' => 'index'], ['class' => 'navbar-brand']) ?>
+<nav class="navbar navbar-expand-sm">
+    <?= $this->Html->image('logo-geekup.svg', array(
+        'width' => '150',
+        'alt' => 'Geekup',
+        'url' => array(
+            'controller' => 'Dashboard',
+            'action' => 'index',
+        ),
+        array(
+            'escape' => false,
+            'class' => 'navbar-brand'
+        )
+    )); ?>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
             aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -50,11 +59,14 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav w-100 my-2 my-md-0 d-flex align-items-center">
             <?php if ($Auth->user()) { ?>
-                <li class="nav-item text-center text-sm-left"><?= $this->Html->link('Accueil', ['controller' => 'Dashboard', 'action' => 'index'], ['class' => ('nav-link ' . $this->templatePath == 'Dashboard' && $this->template == 'index') ? 'active' : '']) ?></li>
-                <li class="nav-item text-center text-sm-left"><?= $this->Html->link('Liste des événements', ['controller' => 'Events', 'action' => 'index'], ['class' => ($this->templatePath == 'Events' && $this->template == 'index') ? 'active' : '']); ?></li>
-                <li class="nav-item text-center text-sm-left"><?= $this->Html->link('Mes événements', ['controller' => 'Events', 'action' => 'manage'], ['class' => ($this->templatePath == 'Events' && $this->template == 'manage') ? 'active' : '']); ?></li>
                 <li class="nav-item text-center text-sm-left">
-                    <?= $this->Html->link('Mes messages', ['controller' => 'Messages', 'action' => 'index'], ['class' => ($this->templatePath == 'Messages' && $this->template == 'index') ? 'active' : '']); ?>
+                    <?= $this->Html->link('Liste des événements', ['controller' => 'Events', 'action' => 'index'], ['class' => ($this->templatePath == 'Events' && $this->template == 'index') ? 'active' : '']); ?>
+                </li>
+                <li class="nav-item text-center text-sm-left">
+                    <?= $this->Html->link('Mes événements', ['controller' => 'Events', 'action' => 'manage'], ['class' => ($this->templatePath == 'Events' && $this->template == 'manage') ? 'active' : '']); ?>
+                </li>
+                <li class="nav-item text-center text-sm-left">
+                    <?= $this->Html->link('Messagerie', ['controller' => 'Messages', 'action' => 'index'], ['class' => ($this->templatePath == 'Messages' && $this->template == 'index') ? 'active' : '']); ?>
                 </li>
                 <li class="nav-item dropdown ml-sm-auto text-center text-sm-left">
                     <a class="user__details nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown"
@@ -80,7 +92,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 
             <?php } else { ?>
                 <li class="nav-item ml-sm-auto text-center text-sm-left">
-                    <?= $this->Html->link('Se connecter', ['controller' => 'Users', 'action' => 'login'], ['class' => ($this->templatePath == 'Users' && $this->template == 'login') ? 'active' : '' . ' nav-link btn btn-secondary']); ?>
+                    <?= $this->Html->link('Se connecter', ['controller' => 'Users', 'action' => 'login'], ['class' => ($this->templatePath == 'Users' && $this->template == 'login') ? 'active' : '' . ' nav-link btn btn-outline--light']); ?>
                 </li>
                 <li class="nav-item text-center text-sm-left">
                     <?= $this->Html->link('Créer un compte', ['controller' => 'Users', 'action' => 'add'], ['class' => ($this->templatePath == 'Users' && $this->template == 'add') ? 'active' : '' . ' nav-link btn btn-primary']); ?>
@@ -90,9 +102,9 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     </div>
 </nav>
 <?= $this->Flash->render() ?>
-<div class="container clearfix">
+<main class="main-wrapper">
     <?= $this->fetch('content') ?>
-</div>
+</main>
 <footer>
 </footer>
 </body>

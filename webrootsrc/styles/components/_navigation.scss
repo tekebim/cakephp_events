@@ -1,0 +1,19 @@
+.navbar {
+    background-color: $primary-color;
+
+    .nav-item {
+        padding: 0 1em;
+        color: $white;
+
+        a {
+            color: $white;
+
+            &.active {
+                padding:10px 20px;
+                border-radius: 30px;
+                background-color: $white;
+                color: $primary-color;
+            }
+        }
+    }
+}

@@ -1,0 +1,15 @@
+.card-shadow__2 {
+    @include card(2);
+}
+
+.card-shadow__3 {
+    @include card(3);
+}
+
+.card-shadow__4 {
+    @include card(4);
+}
+
+.card-shadow__5 {
+    @include card(5);
+}

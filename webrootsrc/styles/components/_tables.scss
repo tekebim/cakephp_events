@@ -1,0 +1,19 @@
+.table-wrapper {
+    padding: 2em;
+    background: $white-color;
+    border-radius: 30px;
+}
+
+.table {
+    th {
+        border-top: none;
+        color: $primary-color;
+    }
+    &.table-striped {
+        tbody {
+            tr:nth-of-type(odd) {
+                background-color: $light-color;
+            }
+        }
+    }
+}

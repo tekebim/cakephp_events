@@ -1,0 +1,38 @@
+.btn {
+    border-radius: 40px;
+    border: none;
+}
+
+.btn-xs {
+    padding: 3px 10px;
+}
+
+.btn-sm {
+    padding: 8px 15px;
+}
+
+.btn-md {
+    padding: 20px 40px;
+}
+
+.btn-primary {
+    background: $primary-color;
+    color: $white-color;
+}
+
+.btn-secondary {
+    background: $secondary-color;
+    color: $white-color;
+}
+
+.btn-outline--light {
+    background: transparent;
+    border: 2px solid $white-color;
+    color: $white-color;
+}
+
+.btn-outline--dark {
+    background: transparent;
+    border: 2px solid $primary-color;
+    color: $primary-color;
+}

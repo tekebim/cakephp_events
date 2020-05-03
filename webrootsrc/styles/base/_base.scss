@@ -1,22 +1,35 @@
 html {
-  overflow: auto;
+    overflow: auto;
 }
 
 body {
-  background-color: $primary-color;
-  margin: 0;
-  padding: 0;
-  font-family: $family-primary;
+    background-color: $light-color;
+    margin: 0;
+    padding: 0;
+    font-family: $family-primary;
+}
+
+.container {
+    overflow: auto;
+}
+
+.row-full {
+    width: 100vw;
+    position: relative;
+    margin-left: -50vw;
+    height: 100px;
+    margin-top: 100px;
+    left: 50%;
 }
 
 // Selection
 
 ::selection {
-  background: $secondary-color;
-  color: $white-color;
+    background: $secondary-color;
+    color: $white-color;
 }
 
 ::-moz-selection {
-  background: $secondary-color;
-  color: $white-color;
+    background: $secondary-color;
+    color: $white-color;
 }

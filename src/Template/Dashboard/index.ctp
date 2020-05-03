@@ -31,6 +31,8 @@
                 <div class="text-center">
                     <h2>Membre(s) actif(s)</h2>
                 </div>
+
+                <?php if (count($lastusers) > 0) { ?>
                 <ul class="list-group list-group-flush">
                     <?php foreach ($lastusers as $user) { ?>
                         <?php
@@ -52,6 +54,9 @@
                         </li>
                     <?php } ?>
                 </ul>
+                <?php } else { ?>
+                    <p>Aucun utilisateur récemment connecté dans les 30 dernières minutes.</p>
+                <?php } ?>
             </div>
         </div>
         <div class="col-4">

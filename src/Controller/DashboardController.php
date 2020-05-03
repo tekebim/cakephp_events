@@ -49,7 +49,8 @@ class DashboardController extends AppController
             ->orWhere(['lastout IS NULL'])
             ->andWhere(['lastin >' => $timePeriodMax])
             ->order(['lastin' => 'DESC'])
-            ->limit(5);
+            ->limit(5)
+            ->toArray();
 
         /*
          * Query contributors

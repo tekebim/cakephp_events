@@ -216,9 +216,7 @@ class EventsController extends AppController
                 ->where(['Users.id !=' => $u['id'], 'Users.id NOT IN' => $req_guests])
                 ->select(['Users.id', 'Users.login'])
                 ->toArray();
-            // $req_users = $this->Events->Users->find()->where(['Users.id !=' => $u['id']])->select(['id', 'login'])->contain(['Guests', 'Guests.Users'])->toArray();
 
-            // $req_users = $this->Events->Users->find()->where(['Users.id !=' => $u['id']])->select(['id', 'login'])->toArray();
             // Create array of all users
             $users = [];
             foreach ($req_users as $user) {
@@ -230,116 +228,33 @@ class EventsController extends AppController
 
             // Check if is from post method
             if ($this->request->is(['post'])) {
-                /*
-                $data = [
-                    [
-                        'event_id' => $eventID,
-                        'user_id' => 144,
-                        'status' => 'tested'
-                    ],
-                    [
-                        'event_id' => $eventID,
-                        'user_id' => 122,
-                        'status' => 'tested'
-                    ],
-                ];
+                $n = $this->request->getData();
+
+                $new = [];
+                foreach ($n['user_id'] as $entity) {
+                    array_push($new, [
+                        "event_id" => intval($eventID),
+                        "user_id" => intval($entity),
+                        "status" => 'toto',
+                    ]);
+                }
+
                 $articles = TableRegistry::get('Guests');
-                $entities = $articles->newEntities($data);
-                $result = $articles->saveMany($entities);
-                */
+                $entities = $articles->newEntities($new);
+                // $result = $articles->saveMany($entities);
 
-                /*
-                // Dans un controller.
-                $articles = TableRegistry::get('Guests');
-                $n = $articles->newEntity();
-                $n = $this->Events->patchEntities($n, $this->request->getData());
-
-                $articles->getConnection()->transactional(function () use ($articles, $n) {
-                    foreach ($n as $entity) {
-                        var_dump($entity);
-                        // $articles->save($entity, ['atomic' => false]);
-                    }
-                });
-                */
-
-
-
-                // Get form data
-
-                $register = $this->Events->newEntity($this->request->getData());
-                // debug($register);
-
-                $p = $this->Events->newEntity();
-
-                $p = $this->Events->patchEntity($p, $this->request->getData());
-
-                // $p = $this->Events->patchEntities($p, $this->request->getData());
-
-                // var_dump($p);
-
-                $users = $this->request->data('user_id');
-
-                foreach ($users as $user) {
-                    $p->user_id = $user;
-                    $this->Events->Guests->saveMany($p);
-
-                }
-                debug($p);
-                $articles = TableRegistry::getTableLocator()->get('Guests');
-                $articles->getConnection()->transactional(function () use ($articles, $p) {
-                    foreach ($p as $entity) {
-                        $articles->save($entity, ['atomic' => false]);
-                    }
-                });
-
-
-
-                // var_dump($this->request->getData());
-                // var_dump($n);
-
-                /*
-                $guests = TableRegistry::getTableLocator()->get('Guests');
-                $entities = $guests->newEntities($this->request->getData(), [
-                    'event_id' => intval($eventID),
-                    'status' => 'validated'
-                ]);
-
-                var_dump($entities);
-                */
-                /*
-                $users = $this->request->data('user_id');
-
-                foreach ($users as $user) {
-                    $n->user_id = $user;
-                    //  $this->Events->Guests->saveMany($n);
-                }
-                */
-
-                // Disable self invitation
-                if ($n->user_id === $u['id']) {
-                    $this->Flash->error('Vous participez déjà à cet événément');
-                    // return $this->redirect(['action' => 'invite', $eventID]);
+                foreach ($entities as $entity) {
+                    // $articles->save($entity);
                 }
 
-                // Check if invitation already sent to user
-                $existing = $this->Events->Guests->find()->where(['user_id' => $n->user_id, 'event_id' => $n->event_id]);
-                $firstEl = $existing->first();
 
-                if ($firstEl) {
-                    $this->Flash->error('Une invitation a déjà été envoyée à l\'utilisateur');
-                    return $this->redirect(['action' => 'invite', $eventID]);
-                }
-
-                /*
-                // Test saving record on database
-                if ($result = $this->Events->Guests->save($n)) {
+                if ($result = $articles->saveMany($entities)) {
                     $this->Flash->success('Votre invitation a été correctement envoyée');
                     return $this->redirect(['action' => 'view', $eventID]);
+                } else {
+                    // Error while trying to save
+                    $this->Flash->error('Une erreur est survenue. Veuillez réessayer.');
                 }
-                // Error while trying to save
-                $this->Flash->error('Une erreur est survenue. Veuillez réessayer.');
-                */
-
             }
         } else {
             $this->Flash->error('Vous n\'êtes pas autorisé à accéder à ce contenu.');
@@ -410,8 +325,6 @@ class EventsController extends AppController
                 }
 
                 // Test saving record on database
-                var_dump($n);
-                /*
                 if ($result = $this->Events->Guests->save($n)) {
                     $this->Flash->success('Votre invitation a été correctement envoyée');
                     return $this->redirect(['action' => 'view', $eventID]);
@@ -420,7 +333,6 @@ class EventsController extends AppController
                     // Error while trying to save
                     $this->Flash->error('Une erreur est survenue. Veuillez réessayer.');
                 }
-                */
 
             }
         } else {

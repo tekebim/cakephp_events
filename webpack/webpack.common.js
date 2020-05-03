@@ -39,7 +39,7 @@ module.exports = {
     plugins: [
         // new CleanWebpackPlugin(),
         new CopyWebpackPlugin([
-            {from: Path.resolve(__dirname, '../webrootsrc/public'), to: 'public'}
+            {from: Path.resolve(__dirname, '../webrootsrc/public'), to: ''}
         ]),
         new webpack.ProvidePlugin({
             $: 'jquery',

@@ -24,6 +24,7 @@
     &:focus,
     &:active {
         background-color: $secondary-color;
+        border-color: $secondary-color;
     }
 }
 
@@ -36,6 +37,7 @@
     &:focus,
     &:active{
         background-color: $secondary-color-darken;
+        border-color: $secondary-color-darken;
     }
 }
 

@@ -69,7 +69,7 @@ $cakeDescription = 'GeekUp: Plateforme d\'événements geeks';
                     <?= $this->Html->link('Liste des événements', ['controller' => 'Events', 'action' => 'index'], ['class' => ($this->templatePath == 'Events' && $this->template == 'index') ? 'active' : '']); ?>
                 </li>
                 <li class="nav-item text-center text-sm-left">
-                    <?= $this->Html->link('Mes événements', ['controller' => 'Events', 'action' => 'manage'], ['class' => ($this->templatePath == 'Events' && $this->template == 'manage') ? 'active' : '']); ?>
+                    <?= $this->Html->link('Mes événements', ['controller' => 'Events', 'action' => 'manage'], ['class' => ($this->templatePath == 'Events' && $this->template == 'manage' || $this->template == 'invite' || $this->template == 'edit') ? 'active' : '']); ?>
                 </li>
                 <li class="nav-item text-center text-sm-left">
                     <?= $this->Html->link('Messagerie', ['controller' => 'Messages', 'action' => 'index'], ['class' => ($this->templatePath == 'Messages') ? 'active' : '']); ?>

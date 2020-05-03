@@ -91,9 +91,9 @@
                 ]); ?>
 
             <?php } else { ?>
-                <div class="content p-0">
+                <div class="content p-0 my-3">
                     <div class="alert alert-warning m-0">
-                        Aucune participation à un événement
+                        Aucune participation à un prochain événement
                     </div>
                 </div>
             <?php } ?>
@@ -103,7 +103,7 @@
                 <?php if ($Auth->user('id') === $user->id) {
                     $titleContent = (count($eventsDone) > 1 ? 'Mes événements auxquels' : 'L\'événement auquel') . ' j\'ai participé :';
                 } else {
-                    $titleContent = (count($eventsDone) > 1 ? 'Les événements auxquels' : 'L\'événement auquel') . ' j\'ai participé :';
+                    $titleContent = (count($eventsDone) > 1 ? 'Les événements auxquels' : 'L\'événement auquel') . ' ' . $user->login . 'a participé :';
                 } ?>
 
                 <?= $this->element('eventstable', [
@@ -119,9 +119,9 @@
 
 
             <?php } else { ?>
-                <div class="content p-0">
+                <div class="content p-0 my-3">
                     <div class="alert alert-warning m-0">
-                        Aucune participation à un événement
+                        Aucune participation à un événement terminé.
                     </div>
                 </div>
             <?php } ?>

@@ -187,7 +187,7 @@ class EventsController extends AppController
         }
     }
 
-    public function invitemultiple($eventID)
+    public function invite($eventID)
     {
         // Get current user from auth
         $u = $this->Auth->user();
@@ -235,7 +235,7 @@ class EventsController extends AppController
                     array_push($new, [
                         "event_id" => intval($eventID),
                         "user_id" => intval($entity),
-                        "status" => 'toto',
+                        "status" => 'validated',
                     ]);
                 }
 
@@ -262,7 +262,7 @@ class EventsController extends AppController
         }
     }
 
-    public function invite($eventID)
+    public function invitesolo($eventID)
     {
         // Get current user from auth
         $u = $this->Auth->user();
@@ -274,7 +274,7 @@ class EventsController extends AppController
         $req = $this->Events->find()
             ->where(['Events.id' => $eventID])
             ->contain(['Users', 'Guests', 'Guests.Users'])
-            ->select(['Events.id', 'Events.user_id', 'Users.login', 'Users.id']);
+            ->select(['Events.id', 'Events.title', 'Events.user_id', 'Users.login', 'Users.id']);
         // Get the first record
         $event = $req->first();
 

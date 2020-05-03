@@ -8,7 +8,10 @@
                 <div class="card-body">
                     <?= $this->Form->create('',['class' => 'form']); ?>
                     <div class="form-group">
-                        <?= $this->Form->control('login', ['class' => 'form-control']); ?>
+                        <?= $this->Form->control('login', [
+                            'class' => 'form-control',
+                            'autocomplete' => 'off'
+                        ]); ?>
                     </div>
                     <div class="form-group">
                         <?= $this->Form->control('password', ['class' => 'form-control']); ?>

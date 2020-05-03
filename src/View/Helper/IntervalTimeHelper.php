@@ -29,18 +29,24 @@ class IntervalTimeHelper extends Helper
         }
 
         if ($eventTime->isToday()) {
-            echo '<label class="label label--today">Aujourd\'hui</label>';
+            echo '<p>';
+            echo '<span class="badge badge-pill badge-success">Aujourd\'hui</span>';
+            echo '</p>';
             return;
         }
 
         if ($eventTime->isFuture()) {
-            echo '<label class="label label--incoming">A venir</label>';
-            echo '<p>Dans ' . $intY . $intM . $intD . '</p>';
+            echo '<p>';
+            echo '<span class="badge badge-pill badge-primary">A venir</span>';
+            echo '<span class="d-block small date-from-now">Dans ' . $intY . $intM . $intD . '</span>';
+            echo '</p>';
             return;
         }
 
         if ($eventTime->isPast()) {
-            echo '<label class="label label--done">Terminé</label>';
+            echo '<p>';
+            echo '<span class="badge badge-pill badge-danger">Terminé</span>';
+            echo '</p>';
             return;
         }
     }
@@ -119,10 +125,6 @@ class IntervalTimeHelper extends Helper
                 $intS > 1 ? $fromS = $intS . $secondConcat : $fromS = $intS . $secondConcat;
             }
         }
-
-        // var_dump($currentTime);
-        // var_dump($dateTime);
-        // var_dump($interval);
 
         return ($fromY != null ? $fromY . ' ' : '') . ($fromM != null ? $fromM . ' ' : '') . ($fromD != null ? $fromD . ' ' : '') . ($fromH != null ? $fromH . ' ' : '') . ($fromI != null ? $fromI . ' ' : '') . ($fromS != null ? $fromS . ' ' : '');
     }

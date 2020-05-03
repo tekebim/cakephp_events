@@ -16,6 +16,18 @@
     .error-message {
         color: $danger-color;
     }
+
+    input {
+        transition: all 1s ease-in;
+        border-width: 1px;
+        &:focus,
+        &:active
+        {
+            border-width: 2px;
+            border-color: $secondary-color;
+            box-shadow: none;
+        }
+    }
 }
 
 .required > label:after {

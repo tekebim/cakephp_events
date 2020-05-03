@@ -8,7 +8,7 @@
             <div class="card card-form mt-5">
                 <div class="card-body">
 
-                    <?= $this->Form->create($e) ?>
+                    <?= $this->Form->create($e, ['class' => 'form']) ?>
                     <fieldset>
                         <div class="form-group">
                             <legend>Votre image de profil :</legend>

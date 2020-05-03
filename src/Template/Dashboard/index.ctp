@@ -1,8 +1,9 @@
 <section id="hero-banner" class="jumbotron jumbotron-fluid">
     <div class="container">
-        <h1 class="display-3">Jumbotron Full-width</h1>
-        <p>Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a
-            galley of type and scrambled it to make a type specimen book.</p>
+        <h1 class="display-3">Geekup : la plateforme <br/>d'événement geeks<br/>près de chez toi</h1>
+        <p>Découvres des centaines d'événements mensuels près de chez toi, ou des sessions virtuelles. Tu pourras
+            retrouver des événements de tout genre : jeu vidéo, cinéma, manga, voyages, programmation, robotique et
+            cosplay.<br/> Rejoins sans plus tarder la communauté de Geekup et échange entre passioné.</p>
         <p class="lead">
             <?= $this->Html->link('Explorer', ['controller' => 'Events', 'action' => 'index'], ['class' => 'btn btn-primary btn-md']) ?>
         </p>

@@ -5,43 +5,59 @@
 <?php } ?>
 
 <div class="table-wrapper my-5">
-    <?php if (count($sourceArray) > 0) { ?>
-    <table class="table">
+    <table class="table table-events">
         <thead>
         <tr>
-            <th>Nom de l'événément</th>
             <?php if ($showDescription) { ?>
-                <th>Description</th>
+                <th>Nom de l'événément</th>
             <?php } ?>
-            <th>Lieu de l'événément</th>
+            <th>Date</th>
+            <th class="text-center">Lieu de l'événément</th>
             <?php if ($showOrganizator) { ?>
-                <th>Organisé par</th>
+                <th class="text-center">Organisé par</th>
             <?php } ?>
             <?php if ($showInvitation) { ?>
-                <th>Invitations (confirmées)</th>
+                <th class="text-center">Invitations (confirmées)</th>
             <?php } ?>
             <?php if ($showStatus) { ?>
-                <th>Status</th>
+                <th class="text-center">Status</th>
             <?php } ?>
         </tr>
         </thead>
         <tbody>
         <?php foreach ($sourceArray as $event) { ?>
             <tr>
-                <td>
-                    <?= $this->Html->link($event->title, ['controller' => 'Events', 'action' => 'view', $event->id]) ?>
-                    <p><?= $this->IntervalTime->createLabel($event->beginning) ?></p>
-                </td>
                 <?php if ($showDescription) { ?>
-                    <td><?= $this->Text->truncate(strip_tags($event->description), 50, ['ellipsis' => '...']) ?>
+                    <td class="align-middle">
+                        <div class="media">
+                            <span class="media-left">
+                            <?php if (!empty($event->picture)) { ?>
+                                <figure class="event__picture">
+                                    <?= $this->Html->image('events/' . $event->picture, ['width' => '100', 'alt' => 'Photo de l\'événement ' . $event->title, 'class' => 'img-fluid']) ?>
+                                </figure>
+                            <?php } else { ?>
+                                <figure class="event__picture">
+                                    <?= $this->Html->image('default-event.png', ['width' => '100', 'alt' => 'Avatar par défaut', 'class' => 'img-fluid']) ?>
+                                </figure>
+                            <?php } ?>
+                            </span>
+                            <div class="media-body">
+                                <h3 class="media-heading"><?= $this->Html->link($event->title, ['controller' => 'Events', 'action' => 'view', $event->id]) ?></h3>
+                                <p><?= $this->Text->truncate(strip_tags($event->description), 50, ['ellipsis' => '...']) ?></p>
+                            </div>
+                        </div>
+
                     </td>
                 <?php } ?>
-                <td><?= $event->location ?></td>
+                <td class="align-middle">
+                    <p><?= $this->IntervalTime->createLabel($event->beginning) ?></p>
+                </td>
+                <td class="text-center align-middle"><?= $event->location ?></td>
                 <?php if ($showOrganizator) { ?>
-                    <td><?= $this->Html->link($event->user->login, ['action' => 'view', $event->user->id, 'controller' => 'Users']) ?></td>
+                    <td class="text-center align-middle"><?= $this->Html->link($event->user->login, ['action' => 'view', $event->user->id, 'controller' => 'Users'], ['class' => 'text-link']) ?></td>
                 <?php } ?>
                 <?php if ($showInvitation) { ?>
-                    <td>
+                    <td class="text-center align-middle">
                         <?php
                         $countParticipant = 0;
                         foreach ($event->guests as $guest) {
@@ -54,7 +70,7 @@
                     </td>
                 <?php } ?>
                 <?php if ($showStatus) { ?>
-                    <td>
+                    <td class="text-center align-middle">
                         <?php
                         if ($Auth->user('id') === $event->user->id) {
                             echo $this->Html->link('Gérer', ['action' => 'edit', $event->id], array('class' => 'btn btn-primary btn-sm'));
@@ -74,15 +90,6 @@
         <?php } ?>
         </tbody>
     </table>
-
-    <?php } else { ?>
-    <div class="content p-0">
-        <div class="alert alert-warning m-0">
-            Aucune participation à un événement
-        </div>
-    </div>
-    <?php } ?>
-
 
     <?php if ($showPagination) { ?>
         <?= $this->element('pagination', []); ?>

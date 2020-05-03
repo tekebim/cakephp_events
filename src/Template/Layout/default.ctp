@@ -72,22 +72,17 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                     <?= $this->Html->link('Mes événements', ['controller' => 'Events', 'action' => 'manage'], ['class' => ($this->templatePath == 'Events' && $this->template == 'manage') ? 'active' : '']); ?>
                 </li>
                 <li class="nav-item text-center text-sm-left">
-                    <?= $this->Html->link('Messagerie', ['controller' => 'Messages', 'action' => 'index'], ['class' => ($this->templatePath == 'Messages' && $this->template == 'index') ? 'active' : '']); ?>
+                    <?= $this->Html->link('Messagerie', ['controller' => 'Messages', 'action' => 'index'], ['class' => ($this->templatePath == 'Messages') ? 'active' : '']); ?>
                 </li>
                 <li class="nav-item dropdown ml-sm-auto text-center text-sm-left">
                     <a class="user__details nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown"
                        aria-haspopup="true" aria-expanded="false">
                         <?php if (!empty($Auth->user('avatar'))) { ?>
-                            <figure class="rounded-circle user__avatar">
-                                <?= $this->Html->image('avatars/' . $Auth->user('avatar'), ['width' => 30, 'alt' => 'Avatar de ' . $Auth->user('login'), 'class' => 'rounded-circle']) ?>
-                            </figure>
+                            <?= $this->Html->image('avatars/' . $Auth->user('avatar'), ['width' => 30, 'alt' => 'Avatar de ' . $Auth->user('login'), 'class' => 'rounded-circle']) ?>
                         <?php } else { ?>
-                            <figure class="user__avatar">
-                                <?= $this->Html->image('default-avatar.png', ['width' => 30, 'alt' => 'Avatar par défaut', 'class' => 'rounded-circle']) ?>
-                            </figure>
+                            <?= $this->Html->image('default-avatar.png', ['width' => 30, 'alt' => 'Avatar par défaut', 'class' => 'rounded-circle']) ?>
                         <?php } ?>
-
-                        <span class="user__name"><?= $Auth->user('login'); ?>(<?= $Auth->user('id'); ?>)</span>
+                        <span class="user__name"><?= $Auth->user('login'); ?></span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
                         <?= $this->Html->link('Voir mon profil', ['controller' => 'Users', 'action' => 'view', $Auth->user('id')], ['class' => ['dropdown-item', ($this->templatePath == 'Users' && $this->template == 'view') ? 'current' : '']]); ?>

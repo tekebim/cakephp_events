@@ -182,7 +182,7 @@ class UsersController extends AppController
             ->contain(['Events', 'Events.Users', 'Guests'])
             ->where(['id' => $id]);
 
-        if($query->isEmpty()){
+        if ($query->isEmpty()) {
             $this->Flash->error('Profil d\'utilisateur inconnu');
             return $this->redirect(['controller' => 'dashboard', 'action' => 'index']);
         }

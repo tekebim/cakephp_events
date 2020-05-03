@@ -22,8 +22,30 @@ body {
     font-weight: 400;
 }
 
+.text-link {
+    font-weight: 500;
+    color:$secondary-color-darken;
+    text-decoration: underline;
+}
+
 .container {
     overflow: auto;
+}
+
+.svg-icon {
+    width: 1em;
+    height: 1em;
+}
+
+.svg-icon path,
+.svg-icon polygon,
+.svg-icon rect {
+    fill: $white-clor;
+}
+
+.svg-icon circle {
+    stroke: $white-clor;
+    stroke-width: 1;
 }
 
 .row-full {

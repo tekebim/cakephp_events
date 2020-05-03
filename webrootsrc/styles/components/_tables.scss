@@ -11,7 +11,7 @@
     }
 
     .table__label {
-        width:30%;
+        width: 30%;
         font-weight: bold;
         color: $primary-color;
     }
@@ -22,5 +22,37 @@
                 background-color: $light-color;
             }
         }
+    }
+}
+
+.table-events {
+    .media-heading {
+        a {
+            color: $primary-color;
+            font-size: 18px;
+        }
+    }
+
+    tbody {
+        tr {
+            transition: background .5s ease-in-out;
+            background: transparent;
+
+            &:hover {
+                background: lighten($light-color, 2%);
+            }
+        }
+    }
+
+    .event__picture {
+        max-width: 100px;
+        overflow: hidden;
+        margin-right: 30px;
+        margin-left: 0;
+    }
+
+    .date-from-now {
+        font-weight: 300;
+        color: $grey-color;
     }
 }

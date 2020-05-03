@@ -157,7 +157,6 @@ class MessagesController extends AppController
 
     public function conversation($id)
     {
-
         // Query from all message to get conversation_id of current user
         $messages = $this->Messages->find()
             ->contain([
@@ -173,10 +172,15 @@ class MessagesController extends AppController
             ->select(
                 [
                     'Messages.conversation_id',
+                    'Messages.event_id',
+                    'Messages.readstatus',
+                    'Messages.type',
                     'Messages.content',
                     'Sender.login',
+                    'Sender.avatar',
                     'Sender.id',
                     'Receiver.login',
+                    'Receiver.avatar',
                     'Receiver.id',
                 ]
             );
@@ -186,6 +190,25 @@ class MessagesController extends AppController
         } else {
             $this->Flash->error('Impossible de charger la conversation demandée');
             return $this->redirect(['controller' => 'Messages', 'action' => 'index']);
+        }
+
+        $n = $this->Messages->newEntity();
+        $this->set(compact('n'));
+
+        // Check if is from post method
+        if ($this->request->is(['post'])) {
+            $u = $this->Auth->user();
+            $n = $this->Messages->patchEntity($n, $this->request->getData());
+            $n->type = 'message';
+            $n->conversation_id = $id;
+            $n->sender_id = $u['id'];
+
+            if ($result = $this->Messages->save($n)) {
+                $this->Flash->success('Message envoyé');
+                return $this->redirect(['action' => 'conversation', $id ]);
+            }
+            // Error while trying to save
+            $this->Flash->error('Une erreur est survenue. Veuillez réessayer.');
         }
 
     }

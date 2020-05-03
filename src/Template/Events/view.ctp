@@ -22,7 +22,7 @@
                     </figure>
                 <?php } ?>
 
-                <table class="table table-event">
+                <table class="table table-events">
                     <tbody>
                     <tr>
                         <td class="table__label">Auteur :</td>

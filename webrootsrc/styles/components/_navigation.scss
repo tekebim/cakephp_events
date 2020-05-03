@@ -1,5 +1,15 @@
 .navbar {
     background-color: $primary-color;
+    padding: 1rem;
+
+    .user__details {
+        display: block;
+        cursor: pointer;
+
+        .user__name {
+            padding: 0 10px;
+        }
+    }
 
     .nav-item {
         padding: 0 1em;
@@ -13,12 +23,23 @@
                 border-radius: 30px;
                 background-color: $white;
                 color: $primary-color;
+                font-weight: 400;
+
+                &:hover {
+                    text-decoration: none;
+                }
             }
 
             &.dropdown-item {
                 color: $primary-color;
+
                 &.current {
                     background-color: $light-color;
+                }
+
+                &:active,
+                &:focus {
+                    background-color: $light-color !important;
                 }
             }
         }

@@ -4,21 +4,12 @@
         <p>Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a
             galley of type and scrambled it to make a type specimen book.</p>
         <p class="lead">
-            <a class="btn btn-primary btn-lg" href="http://tonancos.com/26dY" target="_blank" role="button">Learn
-                more</a>
+            <?= $this->Html->link('Explorer', ['controller' => 'Events', 'action' => 'index'], ['class' => 'btn btn-primary btn-md']) ?>
         </p>
     </div>
 </section>
 
-
-<section class="container-fluid bg-dark">
-    <div class="row">
-        <div class="container">
-            <h1>Dashboard</h1>
-        </div>
-</section>
-
-<div class="container">
+<section class="container">
     <div class="row">
         <div class="col-12">
             <?= $this->element('eventstable', [
@@ -35,7 +26,7 @@
     </div>
     <div class="row my-5">
         <div class="col-4">
-            <div class="card card-shadow__4">
+            <div class="card card-shadow__3">
                 <h2>Utilisateur(s) connecté(s)</h2>
                 <h3>Dans les 30 dernières minutes</h3>
                 <?php if (!empty($lastusers)) { ?>
@@ -64,7 +55,7 @@
             </div>
         </div>
         <div class="col-4">
-            <div class="card card-shadow__4">
+            <div class="card card-shadow__3">
                 <h2>Top contributeurs</h2>
                 <?php if (!empty($contributors)) { ?>
                     <ol>
@@ -80,7 +71,7 @@
             </div>
         </div>
         <div class="col-4">
-            <div class="card card-shadow__4">
+            <div class="card card-shadow__3">
                 <h2>TOP 5 des invités</h2>
                 <?php if (!empty($invated)) { ?>
                     <ol>
@@ -96,4 +87,27 @@
             </div>
         </div>
     </div>
-</div>
+</section>
+
+<section class="container-fluid bg-white">
+    <div class="row">
+        <div class="container py-5">
+            <div class="row text-center">
+                <div class="col-12">
+                    <h1>Comment utiliser Geekup</h1>
+                </div>
+            </div>
+            <div class="row mt-5">
+                <div class="col-6">
+                    <h2>Découvrir des événements</h2>
+                    <p>Explorer une liste d'événents à proximité ou en ligne pour tous les sujets.</p>
+                    <?= $this->Html->link('Explorer', ['controller' => 'Events', 'action' => 'index'], ['class' => 'btn btn-secondary btn-md']) ?>
+                </div>
+                <div class="col-6">
+                    <h2>Créer votre propre événement</h2>
+                    <p>Partager votre événement au sein de la communauté de geek.</p>
+                    <?= $this->Html->link('Je crée un événement', ['controller' => 'Events', 'action' => 'add'], ['class' => 'btn btn-secondary btn-md']) ?>
+                </div>
+            </div>
+        </div>
+</section>

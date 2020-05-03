@@ -1,34 +1,23 @@
-<h1>Mes événements</h1>
+<div class="container">
+    <div class="row">
+        <div class="col-12 my-5">
+            <div class="title text-center">
+                <h1>Gestion de mes événements</h1>
+            </div>
 
-<table>
-    <thead>
-    <tr>
-        <th>Titre</th>
-        <th>Description</th>
-        <th>Date</th>
-        <th>Lieu</th>
-        <th>Invitations</th>
-        <th>Status</th>
-    </tr>
-    </thead>
-    <tbody>
-    <?php foreach ($events as $event) { ?>
-        <tr>
-            <td><?= $this->Html->link($event->title, ['controller' => 'Events', 'action' => 'view', $event->id]) ?></td>
-            <td><?= $this->Text->truncate(strip_tags($event->description), 50, ['ellipsis' => '...']) ?>
-            </td>
-            <td><?= $this->IntervalTime->createLabel($event->beginning) ?></td>
-            <td><?= $event->location ?></td>
-            <td><?= count($event->guests) ?></td>
-            <td>
-                <?php if ($Auth->user('id') === $event->user->id) {
-                    echo $this->Html->link('Gérer', ['action' => 'edit', $event->id], array('class' => 'button'));
-                }
-                ?>
-            </td>
-        </tr>
-    <?php } ?>
-    </tbody>
-</table>
-
-<?= $this->Html->link('Créer un nouvel événement', ['action' => 'add'], array('class' => 'button')); ?>
+            <?= $this->element('eventstable', [
+                'titleType' => 'h2',
+                'titleContent' => false,
+                'sourceArray' => $events,
+                'showOrganizator' => false,
+                'showInvitation' => true,
+                'showDescription' => true,
+                'showPagination' => false,
+                'showStatus' => true,
+            ]); ?>
+            <div class="cta text-center my-5">
+                <?= $this->Html->link('Créer un nouvel événement', ['action' => 'add'], ['class' => 'btn btn-secondary btn-md']) ?>
+            </div>
+        </div>
+    </div>
+</div>

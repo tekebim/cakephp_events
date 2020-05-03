@@ -9,11 +9,22 @@
             color: $white;
 
             &.active {
-                padding:10px 20px;
+                padding: 10px 20px;
                 border-radius: 30px;
                 background-color: $white;
                 color: $primary-color;
             }
+
+            &.dropdown-item {
+                color: $primary-color;
+                &.current {
+                    background-color: $light-color;
+                }
+            }
+        }
+
+        .nav-link {
+            padding: 8px 25px;
         }
     }
 }

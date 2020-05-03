@@ -13,3 +13,8 @@
 .card-shadow__5 {
     @include card(5);
 }
+
+.card-form {
+    border-radius: 30px;
+    padding: 30px;
+}

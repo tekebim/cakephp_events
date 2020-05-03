@@ -27,6 +27,12 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <?= $this->Html->meta('icon') ?>
 
     <?= $this->Html->css('https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css') ?>
+
+    <!--
+    <?= $this->Html->css('base.css') ?>
+    <?= $this->Html->css('style.css') ?>
+    -->
+
     <?= $this->Html->css('main.css') ?>
 
     <?= $this->Html->script('https://cdn.jsdelivr.net/npm/choices.js@9.0.1/public/assets/scripts/choices.min.js') ?>
@@ -84,18 +90,18 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                         <span class="user__name"><?= $Auth->user('login'); ?>(<?= $Auth->user('id'); ?>)</span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                        <?= $this->Html->link('Voir mon profil', ['controller' => 'Users', 'action' => 'view', $Auth->user('id')], ['class' => ('dropdown-item ' . $this->templatePath == 'Users' && $this->template == 'view') ? 'active' : '']); ?>
-                        <?= $this->Html->link('Modifier mon compte', ['controller' => 'Users', 'action' => 'edit'], ['class' => ($this->templatePath == 'Users' && $this->template == 'edit') ? 'active' : '']); ?>
+                        <?= $this->Html->link('Voir mon profil', ['controller' => 'Users', 'action' => 'view', $Auth->user('id')], ['class' => ['dropdown-item', ($this->templatePath == 'Users' && $this->template == 'view') ? 'current' : '']]); ?>
+                        <?= $this->Html->link('Modifier mon compte', ['controller' => 'Users', 'action' => 'edit'], ['class' => ['dropdown-item', ($this->templatePath == 'Users' && $this->template == 'edit') ? 'current' : '']]); ?>
                         <?= $this->Html->link('Se déconnecter', ['controller' => 'Users', 'action' => 'logout'], ['class' => 'dropdown-item']); ?>
                     </div>
                 </li>
 
             <?php } else { ?>
                 <li class="nav-item ml-sm-auto text-center text-sm-left">
-                    <?= $this->Html->link('Se connecter', ['controller' => 'Users', 'action' => 'login'], ['class' => ($this->templatePath == 'Users' && $this->template == 'login') ? 'active' : '' . ' nav-link btn btn-outline--light']); ?>
+                    <?= $this->Html->link('Se connecter', ['controller' => 'Users', 'action' => 'login'], ['class' => 'nav-link btn btn-sm btn-outline--light']); ?>
                 </li>
                 <li class="nav-item text-center text-sm-left">
-                    <?= $this->Html->link('Créer un compte', ['controller' => 'Users', 'action' => 'add'], ['class' => ($this->templatePath == 'Users' && $this->template == 'add') ? 'active' : '' . ' nav-link btn btn-primary']); ?>
+                    <?= $this->Html->link('Créer un compte', ['controller' => 'Users', 'action' => 'add'], ['class' => 'nav-link btn btn-sm btn-secondary']); ?>
                 </li>
             <?php } ?>
         </ul>

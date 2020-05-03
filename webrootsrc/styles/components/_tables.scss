@@ -9,6 +9,13 @@
         border-top: none;
         color: $primary-color;
     }
+
+    .table__label {
+        width:30%;
+        font-weight: bold;
+        color: $primary-color;
+    }
+
     &.table-striped {
         tbody {
             tr:nth-of-type(odd) {

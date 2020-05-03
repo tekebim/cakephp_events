@@ -48,7 +48,7 @@
     &:focus,
     &:active{
         background-color: $white-color;
-        color: $primary-color;
+        color: $primary-color !important;
     }
 }
 

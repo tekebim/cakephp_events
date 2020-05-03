@@ -10,7 +10,7 @@
     </div>
 </section>
 
-<section class="container">
+<section id="stats-users" class="container">
     <div class="row">
         <div class="col-12">
             <?= $this->element('eventstable', [
@@ -27,63 +27,72 @@
     </div>
     <div class="row my-5">
         <div class="col-4">
-            <div class="card card-shadow__3">
-                <h2>Utilisateur(s) connecté(s)</h2>
-                <h3>Dans les 30 dernières minutes</h3>
-                <?php if (!empty($lastusers)) { ?>
-                    <ul>
-                        <?php foreach ($lastusers as $user) { ?>
-                            <?php
-                            $currentTime = new DateTime('now');
-                            $interval = $user->lastin->diff($currentTime);
-                            $intM = ($interval->i) > 0 ? $interval->format('%i') : 0;
-                            ?>
-                            <li><?= $this->Html->link($user->login, ['controller' => 'Users', 'action' => 'view', $user->id]) ?>
-                                <br/>connecté depuis
-                                <?php if ($intM > 0) { ?>
-                                    <?= $intM > 1 ? $intM . ' minutes' : $intM . ' minute'; ?>
-                                <?php } else { ?>
-                                    moins d'une minute
-                                <?php } ?>
-                                <br/>Connecté à <?= $user->lastin ?>
-                                <br/>Déconnecté à <?= $user->lastout ?>
-                            </li>
-                        <?php } ?>
-                    </ul>
-                <?php } else { ?>
-                    <p>Aucun utilisateur actif récemment</p>
-                <?php } ?>
+            <div class="content card card-shadow__3">
+                <div class="text-center">
+                    <h2>Membre(s) actif(s)</h2>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <?php foreach ($lastusers as $user) { ?>
+                        <?php
+                        $currentTime = new DateTime('now');
+                        $interval = $user->lastin->diff($currentTime);
+                        $intM = ($interval->i) > 0 ? $interval->format('%i') : 0;
+                        ?>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <?= $this->Html->link($user->login, ['controller' => 'Users', 'action' => 'view', $user->id]) ?>
+
+                            <span class="badge badge-primary badge-pill">
+                            il y a
+                            <?php if ($intM > 0) { ?>
+                                <?= $intM > 1 ? $intM . ' minutes' : $intM . ' minute'; ?>
+                            <?php } else { ?>
+                                moins d'une minute
+                            <?php } ?>
+                                </span>
+                        </li>
+                    <?php } ?>
+                </ul>
             </div>
         </div>
         <div class="col-4">
-            <div class="card card-shadow__3">
-                <h2>Top contributeurs</h2>
+            <div class="content card card-shadow__3">
+                <div class="text-center">
+                    <h2>Top contributeurs</h2>
+                </div>
                 <?php if (!empty($contributors)) { ?>
-                    <ol>
+                    <ol class="list-group list-group-flush">
                         <?php foreach ($contributors as $user) { ?>
-                            <li><?= $this->Html->link($user->user->login, ['controller' => 'Users', 'action' => 'view', $user->user_id]) ?>
-                                : <?= $user->count ?> moocs
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <?= $this->Html->link($user->user->login, ['controller' => 'Users', 'action' => 'view', $user->user_id]) ?>
+                                <span class="badge badge-primary badge-pill">
+                                    <?= $user->count ?> <?= ($user->count > 1) ? 'événements' : 'événement' ?>
+                                </span>
                             </li>
                         <?php } ?>
                     </ol>
                 <?php } else { ?>
-                    <p>Aucun utilisateur récemment</p>
+                    <p>Aucun utilisateur</p>
                 <?php } ?>
             </div>
         </div>
         <div class="col-4">
-            <div class="card card-shadow__3">
-                <h2>TOP 5 des invités</h2>
+            <div class="content card card-shadow__3">
+                <div class="text-center">
+                    <h2>Top des plus invités</h2>
+                </div>
                 <?php if (!empty($invated)) { ?>
-                    <ol>
+                    <ol class="list-group list-group-flush">
                         <?php foreach ($invated as $user) { ?>
-                            <li><?= $this->Html->link($user->user->login, ['controller' => 'Users', 'action' => 'view', $user->user_id]) ?>
-                                : <?= $user->count ?> invitations
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <?= $this->Html->link($user->user->login, ['controller' => 'Users', 'action' => 'view', $user->user_id]) ?>
+                                <span class="badge badge-primary badge-pill">
+                                <?= $user->count ?> <?= ($user->count > 1) ? 'invitations' : 'invitation' ?>
+                                </span>
                             </li>
                         <?php } ?>
                     </ol>
                 <?php } else { ?>
-                    <p>Aucun utilisateur récemment</p>
+                    <p>Aucun utilisateur</p>
                 <?php } ?>
             </div>
         </div>

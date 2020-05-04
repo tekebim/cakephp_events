@@ -19,6 +19,9 @@
                                 <?= $this->Html->image('default-event.png', ['alt' => 'Photo par défaut', 'class' => 'img-fluid']) ?>
                             </figure>
                         <?php } ?>
+                        <div class="text-center my-3">
+                            <?= $this->Html->link('Upload une nouvelle image', ['action' => 'editpicture', $e->id], ['class' => 'btn btn-sm btn-primary']); ?>
+                        </div>
                     </fieldset>
                     <fieldset>
                         <legend>Informations de l'événement</legend>

@@ -1,12 +1,7 @@
 <div class="container">
-    <section class="breadcrumb">
-        <div class="row">
-            <div class="col-12">
-                <?= $this->Html->link('Retour à la liste des événements', ['controller' => 'Events', 'action' => 'index']); ?>
-            </div>
-        </div>
-    </section>
-
+    <div class="col-12">
+        <?= $this->Html->link('Retour à la liste des événements', ['controller' => 'Events', 'action' => 'index'], ['class' => 'btn btn-sm btn-outline--dark']); ?>
+    </div>
     <div class="title text-center">
         <h1>Détail de l'événement</h1>
     </div>

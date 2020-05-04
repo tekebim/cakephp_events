@@ -143,25 +143,26 @@ class EventsController extends AppController
         }
     }
 
-    public function editpicture()
+    public function editpicture($eventID)
     {
         // on recupere les infos par rapport à la photo actuelle
-        $modif = $this->Users->get($this->Auth->user('id'));
+        $modif = $this->Events->get($eventID);
         // $modif = $this->Users->find()->where(['id' => $u['id']]);
         $this->set(compact('modif'));
         // On copie l'ancien nom de fichier
-        $ancienNom = $modif->avatar;
+        $ancienNom = $modif->picture;
 
         // on copie en mémoire le nom de l'ancien fichier
-        $currentFileName = $modif->avatar;
+        $currentFileName = $modif->picture;
 
         // si on recoit un form
         if ($this->request->is(['post', 'put'])) {
             // on patch les données
-            $this->Users->patchEntity($modif, $this->request->getData());
+            $this->Events->patchEntity($modif, $this->request->getData());
 
-            // on recupere les infos par rapport à l'avatar actuel ( user connecté )
-            $modif = $this->Users->get($this->Auth->user('id'));
+            // on recupere les infos par rapport au visuel actuel
+            // $modif = $this->Events->get($eventID);
+
             // si on a pas recu le fichier ou le format de l'image n est pas le bon
             if (empty($this->request->getData()['picture']['name']) || !in_array($this->request->getData()['picture']['type'], ['image/png', 'image/jpg', 'image/jpeg', 'image/gif'])) {
                 // Flash error
@@ -174,9 +175,9 @@ class EventsController extends AppController
                 // on deplace le fichier de la memoire temporaire vers le dossier avatars
                 move_uploaded_file($this->request->getData()['picture']['tmp_name'], WWW_ROOT . 'img/events/' . $newName);
                 // on remplace le npm de l'objet à sauvegarder
-                $modif->avatar = $newName;
+                $modif->picture = $newName;
                 // On essaie la sauvegarde (if else)
-                if ($this->Users->save($modif)) {
+                if ($this->Events->save($modif)) {
                     $this->Flash->success('Image uploadée');
                     // si l'ancien fichier existe --> !empty && file_exists
                     if (!empty($ancienNom) && file_exists(WWW_ROOT . 'img/events/' . $ancienNom)) {

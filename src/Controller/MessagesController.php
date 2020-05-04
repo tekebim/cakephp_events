@@ -11,47 +11,6 @@ class MessagesController extends AppController
         parent::initialize();
     }
 
-    public function old_index()
-    {
-        $messages = $this->Messages->find()->contain(['Sender', 'Receiver']);
-        $messages
-            ->where(['Messages.receiver_id' => $this->Auth->user('id')])
-            ->orWhere(['Messages.sender_id' => $this->Auth->user('id')])
-            ->order(['Messages.created' => 'DESC'])
-            ->toArray();
-
-        $this->set(compact('messages'));
-    }
-
-
-    /*
-    ->select([
-        'Messages.sender_id',
-        'Messages.receiver_id',
-        'Messages.content',
-        'Messages.created',
-        'Sender.login',
-        'Sender.avatar',
-        'Receiver.login',
-        'Receiver.avatar',
-    ])
-    */
-
-    public function display()
-    {
-        $messages = $this->Messages->find()
-            ->where(['Messages.receiver_id' => $this->Auth->user('id')])
-            ->orWhere(['Messages.sender_id' => $this->Auth->user('id')])
-            ->order(['Messages.created' => 'DESC'])
-            ->contain([
-                'Sender',
-                'Receiver'
-            ])
-            ->toArray();
-
-        $this->set(compact('messages'));
-    }
-
     public function index()
     {
         // Query from all message to get conversation_id of current user

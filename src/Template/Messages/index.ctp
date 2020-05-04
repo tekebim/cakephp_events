@@ -8,8 +8,8 @@
     </div>
     <div class="row my-5 inner-conversation">
         <div class="col-4 list-conversations bg-white justify-content-center align-content-center">
-            <?php if (empty($messages)) { ?>
-                <p>Vous n'avez pas encore échangé avec des membres de la communauté GeekUp.</p>
+            <?php if (empty($conversations)) { ?>
+                <p class="m-5">Vous n'avez pas encore échangé avec des membres de la communauté GeekUp.</p>
             <?php } else { ?>
                 <ul class="list-group row">
                     <?php foreach ($conversations as $c) { ?>

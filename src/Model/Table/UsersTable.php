@@ -18,7 +18,6 @@ class UsersTable extends Table
         // relation with Events ( table_name , relation:foreign key )
         $this->hasMany('Events', ['foreignKey' => 'user_id', 'dependent' => true, 'cascadeCallbacks' => true]);
         $this->hasMany('Guests', ['foreignKey' => 'user_id', 'dependent' => true, 'cascadeCallbacks' => true]);
-        // $this->hasMany('Events', ['foreignKey' => 'user_id', 'dependent' => true, 'cascadeCallbacks' => true]);
     }
 
     public function validationDefault(Validator $v)

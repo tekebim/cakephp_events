@@ -13,8 +13,6 @@ class GuestsTable extends Table
         // self manage the columns 'created' and 'modified'
         $this->addBehavior('Timestamp');
         // relation with Events ( table_name , relation:foreign key )
-        // $this->hasMany('Events', ['foreignKey' => 'user_id', 'dependent' => true, 'cascadeCallbacks' => true]);
-        // $this->hasMany('Events', ['foreignKey' => 'user_id', 'dependent' => true, 'cascadeCallbacks' => true]);
         $this->belongsTo('Users', ['foreignKey' => 'user_id', 'joinType' => 'INNER']);
         $this->belongsTo('Events', ['foreignKey' => 'event_id', 'joinType' => 'INNER']);
     }

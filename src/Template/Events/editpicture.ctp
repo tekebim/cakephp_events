@@ -9,14 +9,14 @@
                 <div class="card-body">
 
                     <div>
-                        <p>Votre avatar actuel : </p>
+                        <p>Le visuel actuel : </p>
                         <?php if (!empty($modif->picture)) { ?>
                             <figure>
                                 <?= $this->Html->image('events/' . $modif->picture, ['alt' => 'Visuel de ' . $modif->title, 'class' => 'img-fluid']) ?>
                             </figure>
                         <?php } else { ?>
                             <figure>
-                                <?= $this->Html->image('default-event.png', ['alt' => 'Avatar par défaut', 'class' => 'img-fluid']) ?>
+                                <?= $this->Html->image('default-event.png', ['alt' => 'Visuel par défaut', 'class' => 'img-fluid']) ?>
                             </figure>
                         <?php } ?>
                     </div>

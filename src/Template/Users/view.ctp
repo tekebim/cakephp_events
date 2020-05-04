@@ -10,11 +10,11 @@
                 <div class="col-4">
                     <?php if (!empty($user->avatar)) { ?>
                         <figure>
-                            <?= $this->Html->image('avatars/' . $user->avatar, ['alt' => 'Avatar de ' . $user->pseudo]) ?>
+                            <?= $this->Html->image('avatars/' . $user->avatar, ['alt' => 'Avatar de ' . $user->pseudo, 'class' => 'img-fluid']) ?>
                         </figure>
                     <?php } else { ?>
                         <figure>
-                            <?= $this->Html->image('default-avatar.png', ['alt' => 'Avatar par défaut']) ?>
+                            <?= $this->Html->image('default-avatar.png', ['alt' => 'Avatar par défaut', 'class' => 'img-fluid']) ?>
                         </figure>
                     <?php } ?>
                 </div>
@@ -44,12 +44,6 @@
                                 <td class="pt-3">
                                     <?= $this->Html->link('Mettre à jour mes informations', ['action' => 'edit'], ['class' => 'btn btn-sm btn-primary mx-2']); ?>
                                     <?= $this->Form->postLink('Supprimer mon compte', ['controller' => 'Users', 'action' => 'delete'], ['confirm' => 'Etes-vous sûr ?', 'class' => 'btn btn-outline--dark btn-sm mx-2']); ?>
-                                </td>
-                            </tr>
-                        <?php } else { ?>
-                            <tr>
-                                <td class="pt-5">
-                                    <?= $this->Html->link('Contacter', ['controller' => 'Messages', 'action' => 'new'], ['class' => 'btn btn-md btn-primary']); ?>
                                 </td>
                             </tr>
                         <?php } ?>

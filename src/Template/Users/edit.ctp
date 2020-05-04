@@ -15,16 +15,18 @@
                         </div>
                         <div class="form-group">
                             <?php if (!empty($e->avatar)) { ?>
-                                <figure>
-                                    <?= $this->Html->image('avatars/' . $e->avatar, ['alt' => 'Avatar de ' . $e->login]) ?>
+                                <figure class="text-center">
+                                    <?= $this->Html->image('avatars/' . $e->avatar, ['alt' => 'Avatar de ' . $e->login, 'class' => 'img-fluid']) ?>
                                 </figure>
                             <?php } else { ?>
-                                <figure>
-                                    <?= $this->Html->image('default-avatar.png', ['alt' => 'Avatar par défaut']) ?>
+                                <figure class="text-center">
+                                    <?= $this->Html->image('default-avatar.png', ['alt' => 'Avatar par défaut', 'class' => 'img-fluid']) ?>
                                 </figure>
                             <?php } ?>
                         </div>
-                        <?= $this->Html->link('Upload une nouvelle image', ['action' => 'editavatar']); ?>
+                        <div class="text-center my-3">
+                            <?= $this->Html->link('Upload une nouvelle image', ['action' => 'editavatar'], ['class' => 'btn btn-sm btn-primary']); ?>
+                        </div>
                     </fieldset>
                     <fieldset>
                         <div class="form-group">

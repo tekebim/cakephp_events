@@ -84,6 +84,11 @@ class UsersController extends AppController
         if ($this->request->is(['post', 'put'])) {
             $this->Users->patchEntity($firstElement, $this->request->getData());
             if ($this->Users->save($firstElement)) {
+                // Need to refresh Auth
+                // Retrieve user from DB
+                $authUser = $this->Users->get($u['id'])->toArray();
+                // Log user in using Auth
+                $this->Auth->setUser($authUser);
                 $this->Flash->success('Modification(s) de votre compte effectuée(s)');
                 return $this->redirect(['action' => 'view', $u['id']]);
             }

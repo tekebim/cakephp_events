@@ -55,7 +55,7 @@ class MessagesController extends AppController
     public function index()
     {
         // Query from all message to get conversation_id of current user
-        $all = $this->Messages->find()
+        $messages = $this->Messages->find()
             ->contain([
                 'Sender',
                 'Receiver'
@@ -63,19 +63,19 @@ class MessagesController extends AppController
             ->where(['Messages.receiver_id' => $this->Auth->user('id')])
             ->orWhere(['Messages.sender_id' => $this->Auth->user('id')]);
 
-        $all->select(
-            [
-                'count' => $all->func()->count('Messages.conversation_id'),
-                'Messages.conversation_id'
-            ]
-        )
-            ->group('Messages.conversation_id')
-        ->toArray();
+        $messages
+            ->select(
+                [
+                    'count' => $messages->func()->count('Messages.conversation_id'),
+                    'Messages.conversation_id'
+                ]
+            )
+            ->group('Messages.conversation_id');
 
-        $resultSet = $all->all();
+        $resultSet = $messages->all();
 
         // Create empty array
-        $messages = [];
+        $conversations = [];
         // While result from previous conversation
         while ($resultSet->valid()) {
             // The current vlue
@@ -107,12 +107,12 @@ class MessagesController extends AppController
                 ->toArray();
 
             // Add this result to array
-            array_push($messages, $one);
+            array_push($conversations, $one);
             // Go to to next result
             $resultSet->next();
         }
         // Share array to view
-        $this->set(compact('messages'));
+        $this->set(compact('messages', 'conversations'));
     }
 
     public function conversation($id)
@@ -165,7 +165,7 @@ class MessagesController extends AppController
 
             if ($result = $this->Messages->save($n)) {
                 $this->Flash->success('Message envoyé');
-                return $this->redirect(['action' => 'conversation', $id ]);
+                return $this->redirect(['action' => 'conversation', $id]);
             }
             // Error while trying to save
             $this->Flash->error('Une erreur est survenue. Veuillez réessayer.');
@@ -207,23 +207,21 @@ class MessagesController extends AppController
                     ]]);
 
                 // If no results found in conversations table
-                if($conversation->isEmpty()){
+                if ($conversation->isEmpty()) {
                     // Prepare data
                     $data = $this->Conversations->newEntity();
                     $data->user1_id = $n->sender_id;
                     $data->user2_id = $n->receiver_id;
                     // Passed data and try to save new record
-                    if( $result = $this->Conversations->save($data) ) {
+                    if ($result = $this->Conversations->save($data)) {
                         echo 'save ok';
-                        $conversationId=$result->id;
-                    }
-                    else {
+                        $conversationId = $result->id;
+                    } else {
                         $this->Flash->error('Une erreur est survenue. Veuillez réessayer.');
                         return;
                     }
                     // We need to create a new conversation
-                }
-                else {
+                } else {
                     $element = $conversation->first();
                     $conversationId = $element->id;
                 }

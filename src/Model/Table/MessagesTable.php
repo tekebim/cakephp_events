@@ -14,10 +14,10 @@ class MessagesTable extends Table
         $this->addBehavior('Timestamp');
 
         $this->belongsTo('Sender', [
-            'className' => 'Users',
-            'foreignKey' => 'sender_id',
-            'propertyName' => 'Sender',
-            'joinType' => 'INNER']
+                'className' => 'Users',
+                'foreignKey' => 'sender_id',
+                'propertyName' => 'Sender',
+                'joinType' => 'INNER']
         );
 
         $this->belongsTo('Receiver', [
@@ -26,6 +26,8 @@ class MessagesTable extends Table
                 'propertyName' => 'Receiver',
                 'joinType' => 'INNER']
         );
+
+        $this->belongsTo('Conversations', ['foreignKey' => 'conversation_id', 'joinType' => 'INNER']);
     }
 
     public function validationDefault(Validator $v)

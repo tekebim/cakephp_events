@@ -27,18 +27,23 @@
                                 $c[0]->conversation_id
                             ]); ?>" class="conversation-link">
                                 <div class="discuss__wrapper p-3">
-                                    <p>Conversation ID : <?= $c[0]->conversation_id ?></p>
                                     <div class="discuss__user">
-                                        <?php if (!empty($Auth->user('avatar'))) { ?>
-                                            <figure class="rounded-circle user__avatar">
-                                                <?= $this->Html->image('avatars/' . $Auth->user('avatar'), ['width' => 30, 'alt' => 'Avatar de ' . $Auth->user('login'), 'class' => 'rounded-circle']) ?>
-                                            </figure>
-                                        <?php } else { ?>
-                                            <figure class="user__avatar">
-                                                <?= $this->Html->image('default-avatar.png', ['width' => 30, 'alt' => 'Avatar par défaut', 'class' => 'rounded-circle']) ?>
-                                            </figure>
-                                        <?php } ?>
-                                        <strong><?= $c[0]->$user->login ?></strong>
+                                        <div class="media">
+                                            <div class="media-left mr-4">
+                                                <?php if (!empty($Auth->user('avatar'))) { ?>
+                                                    <figure class="rounded-circle user__avatar">
+                                                        <?= $this->Html->image('avatars/' . $Auth->user('avatar'), ['width' => 30, 'alt' => 'Avatar de ' . $Auth->user('login'), 'class' => 'rounded-circle']) ?>
+                                                    </figure>
+                                                <?php } else { ?>
+                                                    <figure class="user__avatar">
+                                                        <?= $this->Html->image('default-avatar.png', ['width' => 30, 'alt' => 'Avatar par défaut', 'class' => 'rounded-circle']) ?>
+                                                    </figure>
+                                                <?php } ?>
+                                            </div>
+                                            <div class="media-body">
+                                                <strong><?= $c[0]->$user->login ?></strong>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="discuss__msg">
                                         <?php if ($c[0]->type === 'request') { ?>
@@ -48,10 +53,10 @@
                                             <?= $this->Text->truncate(strip_tags($c[0]->content), 50, ['ellipsis' => '...']) ?>
                                         </p>
 
-                                        <?php if (empty($c[0]->readstatus)) {
+                                        <?php if (empty($c[0]->readstatus) && $c[0]->sender_id !== $Auth->user('id')) {
                                             echo '⬤';
                                         } else {
-                                            echo '<span>' . $c[0]->readstatus->i18nFormat('dd/MM/yyyy hh:mm') . '</span>';
+                                            // echo '<span>' . $c[0]->readstatus->i18nFormat('dd/MM/yyyy hh:mm') . '</span>';
                                         } ?>
                                     </div>
                                 </div>

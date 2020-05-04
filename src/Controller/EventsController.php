@@ -47,7 +47,11 @@ class EventsController extends AppController
     {
         $u = $this->Auth->user();
         // Get the current user events
-        $events = $this->Events->find()->where(['user_id' => $u['id']])->contain(['Users', 'Guests'])->order(['beginning' => 'DESC']);
+        $events = $this->Events->find()
+            ->contain(['Users', 'Guests'])
+            ->where(['user_id' => $u['id']])
+            ->order(['beginning' => 'DESC'])
+            ->toArray();
         // Share to view
         $this->set(compact('events'));
     }
@@ -328,8 +332,7 @@ class EventsController extends AppController
                 if ($result = $this->Events->Guests->save($n)) {
                     $this->Flash->success('Votre invitation a été correctement envoyée');
                     return $this->redirect(['action' => 'view', $eventID]);
-                }
-                else {
+                } else {
                     // Error while trying to save
                     $this->Flash->error('Une erreur est survenue. Veuillez réessayer.');
                 }

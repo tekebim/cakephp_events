@@ -12,8 +12,7 @@ class ConversationsTable extends Table
     {
         // self manage the columns 'created' and 'modified'
         $this->addBehavior('Timestamp');
-
-
+        $this->hasMany('Messages', ['foreignKey' => 'conversation_id', 'dependent' => true, 'cascadeCallbacks' => true]);
     }
 
     public function validationDefault(Validator $v)

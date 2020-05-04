@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use Cake\Controller\Controller;
+use Cake\I18n\Time;
 
 class MessagesController extends AppController
 {
@@ -76,36 +77,57 @@ class MessagesController extends AppController
 
     public function conversation($id)
     {
-        // Query from all message to get conversation_id of current user
+         // Query from all message to get conversation_id of current user
         $messages = $this->Messages->find()
             ->contain([
                 'Sender',
-                'Receiver'
+                'Receiver',
+                'Conversations'
             ])
             ->where(['Messages.conversation_id' => $id])
             ->andWhere(['OR' => [
                 'Messages.sender_id' => $this->Auth->user()['id'],
                 'Messages.receiver_id' => $this->Auth->user()['id']
             ]])
-            //->andWhere(['Messages.sender_id OR Messages.receiver_id' => $this->Auth->user()['id']])
             ->select(
                 [
+                    'Messages.id',
                     'Messages.conversation_id',
                     'Messages.event_id',
                     'Messages.readstatus',
                     'Messages.type',
                     'Messages.content',
+                    'Messages.created',
                     'Sender.login',
                     'Sender.avatar',
                     'Sender.id',
                     'Receiver.login',
                     'Receiver.avatar',
                     'Receiver.id',
+                    'Conversations.user1_id',
+                    'Conversations.user2_id',
                 ]
-            );
+            )
+            ->order(['Messages.created' => 'DESC']);
+
+        $unreadMsg = [];
+
+        foreach ($messages as $m) {
+            if ($m->Sender->id !== $this->Auth->user()['id'] && empty($m->readstatus)) {
+                array_push($unreadMsg, $m->id);
+            }
+        }
 
         if (!$messages->isEmpty()) {
             $this->set(compact('messages'));
+            // Update readstatus of unread message
+            if (!empty($unreadMsg)) {
+                $query = $this->Messages->query();
+                $query->update()
+                    ->set(['readstatus' => new Time('now')])
+                    ->where(['id IN' => $unreadMsg])
+                    ->execute();
+            }
         } else {
             $this->Flash->error('Impossible de charger la conversation demandée');
             return $this->redirect(['controller' => 'Messages', 'action' => 'index']);
@@ -129,7 +151,6 @@ class MessagesController extends AppController
             // Error while trying to save
             $this->Flash->error('Une erreur est survenue. Veuillez réessayer.');
         }
-
     }
 
     public function request($eventID)

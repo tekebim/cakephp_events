@@ -13,6 +13,8 @@ class EventsTable extends Table
     {
         // self manage the columns 'created' and 'modified'
         $this->addBehavior('Timestamp');
+        // add picture behavior
+        $this->addBehavior('Picture');
         $this->belongsTo('Users', ['foreignKey' => 'user_id', 'joinType' => 'INNER']);
         $this->hasMany('Guests', ['foreignKey' => 'event_id', 'dependent' => true, 'cascadeCallbacks' => true]);
     }

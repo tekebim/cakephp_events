@@ -1,5 +1,5 @@
 <?php if ($titleContent) { ?>
-    <?= '<' . $titleType . ' class="mt-5">' ?>
+    <?= '<' . $titleType . ' class="mt-5 text-center">' ?>
     <?= $titleContent; ?>
     <?= '</' . $titleType . '>' ?>
 <?php } ?>

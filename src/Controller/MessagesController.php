@@ -55,7 +55,7 @@ class MessagesController extends AppController
     public function index()
     {
         // Query from all message to get conversation_id of current user
-        $messages = $this->Messages->find()
+        $all = $this->Messages->find()
             ->contain([
                 'Sender',
                 'Receiver'
@@ -63,18 +63,19 @@ class MessagesController extends AppController
             ->where(['Messages.receiver_id' => $this->Auth->user('id')])
             ->orWhere(['Messages.sender_id' => $this->Auth->user('id')]);
 
-        $messages->select(
+        $all->select(
             [
-                'count' => $messages->func()->count('Messages.conversation_id'),
+                'count' => $all->func()->count('Messages.conversation_id'),
                 'Messages.conversation_id'
             ]
         )
-            ->group('Messages.conversation_id');
+            ->group('Messages.conversation_id')
+        ->toArray();
 
-        $resultSet = $messages->all();
+        $resultSet = $all->all();
 
         // Create empty array
-        $test = [];
+        $messages = [];
         // While result from previous conversation
         while ($resultSet->valid()) {
             // The current vlue
@@ -106,52 +107,11 @@ class MessagesController extends AppController
                 ->toArray();
 
             // Add this result to array
-            array_push($test, $one);
+            array_push($messages, $one);
             // Go to to next result
             $resultSet->next();
         }
         // Share array to view
-        $this->set(compact('test'));
-
-        /*
-        foreach ($messages as $message){
-            $test = $this->Messages->find()
-                ->contain([
-                    'Sender',
-                    'Receiver'
-                ]);
-            $test->select(
-                [
-                    // 'count' => $messages->func()->count('Messages.conversation_id'),
-                    'Messages.conversation_id',
-                    'Messages.id',
-                    'Messages.type',
-                    'Messages.content',
-                    'Messages.sender_id',
-                    'Messages.receiver_id',
-                    'Messages.created',
-                    'Sender.login',
-                    'Receiver.login',
-                ]
-            )
-            ->where(['Messages.conversation_id' => $message->conversation_id])
-            ->order(['Messages.created' => 'DESC'])
-            ->limit(1);
-        }
-        */
-
-        /*
-        $messages
-            ->select([
-                'count' => $messages->func()->count('Messages.conversation_id'),
-                'Messages.conversation_id'
-            ])
-            ->group('Messages.conversation_id')
-            ->order(['Messages.created' => 'DESC'])
-            ->limit(1);
-        */
-
-
         $this->set(compact('messages'));
     }
 
@@ -217,7 +177,6 @@ class MessagesController extends AppController
     {
         $this->loadModel('Guests');
         $this->loadModel('Conversations');
-
         $n = $this->Messages->newEntity();
         $this->set(compact('n'));
 
@@ -233,7 +192,7 @@ class MessagesController extends AppController
                 $n->sender_id = $this->Auth->user()['id'];
                 // Determine receiver_id
                 $n->receiver_id = intval($_POST['receiver_id']);
-                $n->event_id = $eventID;
+                // $n->event_id = $eventID;
                 $n->type = 'request';
 
                 $conversation = $this->Conversations->find()

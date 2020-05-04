@@ -189,14 +189,6 @@ class UsersController extends AppController
 
         $upcomming = $query->first();
 
-        /*
-        $eventsUpcomming = $this->Users->find()
-            ->contain(['Events', 'Events.Users', 'Guests'])
-            ->select(['Events.beginning'])
-            ->where(['Users.id > ' => $id])
-            ->toArray();
-        */
-
         $this->set(compact('user', 'upcomming', 'currentTime'));
     }
 

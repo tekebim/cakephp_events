@@ -46,27 +46,18 @@
                         <td>
                             <?php if (count($event->guests) > 0) {
                                 $guestsPending = [];
+                                $guestsCanceled = [];
                                 $guestsParticipating = [];
 
                                 foreach ($event->guests as $guest) {
                                     if ($guest->status === 'validated') {
                                         array_push($guestsParticipating, $guest);
+                                    } else if ($guest->status === 'canceled') {
+                                        array_push($guestsCanceled, $guest);
                                     } else {
                                         array_push($guestsPending, $guest);
                                     }
                                 } ?>
-
-                                <?php if (!empty($guestsPending)) { ?>
-                                    <ul>
-                                        <?php foreach ($guestsPending as $guest) { ?>
-                                            <li>
-                                                <?= $this->Html->link($guest->user->login, ['controller' => 'Users', 'action' => 'view', $guest->user->id]); ?>
-                                                (en attente)
-                                                (id:<?= $guest->user->id ?>)
-                                            </li>
-                                        <?php } ?>
-                                    </ul>
-                                <?php } ?>
 
                                 <?php if (!empty($guestsParticipating)) { ?>
                                     <ul>
@@ -78,6 +69,28 @@
                                     </ul>
                                 <?php } else { ?>
                                     <div class="alert alert-warning">Pas de participants confirmés pour le moment</div>
+                                <?php } ?>
+
+                                <?php if (!empty($guestsPending)) { ?>
+                                    <ul>
+                                        <?php foreach ($guestsPending as $guest) { ?>
+                                            <li>
+                                                <?= $this->Html->link($guest->user->login, ['controller' => 'Users', 'action' => 'view', $guest->user->id]); ?>
+                                                <span class="small">(en attente)</span>
+                                            </li>
+                                        <?php } ?>
+                                    </ul>
+                                <?php } ?>
+
+                                <?php if (!empty($guestsCanceled)) { ?>
+                                    <ul>
+                                        <?php foreach ($guestsCanceled as $guest) { ?>
+                                            <li>
+                                                <?= $this->Html->link($guest->user->login, ['controller' => 'Users', 'action' => 'view', $guest->user->id]); ?>
+                                                <span class="small">(annulé)</span>
+                                            </li>
+                                        <?php } ?>
+                                    </ul>
                                 <?php } ?>
 
                             <?php } ?>
@@ -94,25 +107,38 @@
             if ($Auth->user('id') !== $event->user->id) {
                 $guestsId = [];
                 foreach ($event->guests as $guest) {
-                    array_push($guestsId, $guest['user_id']);
+                    if($guest->status !== 'canceled') {
+                        array_push($guestsId, $guest['user_id']);
+                    }
                 }
                 if (in_array($Auth->user('id'), $guestsId)) { ?>
-                    <div class="alert alert-success">
-                        Vous participez déjà à cet événement ou une demande d'invitation a été envoyé.
+                    <div class="alert alert-success mt-5">
+                        Vous êtes invité à cet événement ou une demande d'invitation a été envoyé.
                     </div>
-                    <?= $this->Form->postLink('Je ne suis plus disponible', ['controller' => 'Guests', 'action' => 'remove', $event->id], ['confirm' => 'Êtes-vous sûr de vouloir ne plus participer à cet événement ?']); ?>
-                <?php } else {
-                    echo $this->Form->postLink('Demande d\'invitation',
-                        ['controller' => 'Messages', 'action' => 'request', $event->id],
-                        array(
-                            'class' => 'button',
-                            'data' => [
-                                'receiver_id' => $event->user_id,
-                                'receiver_name' => $event->user->login
+                    <div class="text-center">
+                        <?= $this->Form->postLink('Je ne suis plus disponible',
+                            ['controller' => 'Guests', 'action' => 'cancel', $event->id],
+                            [
+                                'confirm' => 'Êtes-vous sûr de vouloir ne plus participer à cet événement ?',
+                                'class' => 'btn btn-outline--dark btn-sm'
+                            ]); ?>
+                    </div>
+                <?php } else { ?>
+                    <div class="text-center mt-5">
+                        <?= $this->Form->postLink('Demande d\'invitation à l\'organisateur',
+                            ['controller' => 'Messages', 'action' => 'request', $event->id],
+                            [
+                                'class' => 'btn btn-primary btn-md',
+                                'data' => [
+                                    'event_id' => $event->id,
+                                    'event_title' => $event->title,
+                                    'receiver_id' => $event->user_id,
+                                    'receiver_name' => $event->user->login
+                                ]
                             ]
-                        )
-                    );
-                }
+                        ); ?>
+                    </div>
+                <?php }
             } else { ?>
 
                 <div class="cta text-center mt-5">

@@ -2,19 +2,9 @@ window.addEventListener('load', (event) => {
 
     // Pass single element
     const choiceElement = document.querySelector('.js-choice');
-    /*
-    const choices = new Choices(element);
-
-    // Pass reference
-    const choices = new Choices('[data-trigger]');
-    const choices = new Choices('.js-choice');
-
-    // Pass jQuery element
-    const choices = new Choices($('.js-choice')[0]);
-    */
 
     // Passing options (with default options)
-    if (typeof(choiceElement) != 'undefined' && choiceElement != null) {
+    if (typeof (choiceElement) != 'undefined' && choiceElement != null) {
         const choices = new Choices(choiceElement, {
             silent: false,
             items: [],
@@ -93,9 +83,5 @@ window.addEventListener('load', (event) => {
             callbackOnInit: null,
             callbackOnCreateTemplates: null
         });
-        console.log('element exist');
-    }
-    else {
-        console.log('element not exist');
     }
 });

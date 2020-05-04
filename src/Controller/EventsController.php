@@ -141,7 +141,7 @@ class EventsController extends AppController
 
     public function editpicture()
     {
-        // on recupere les infos par rapport à l'avatar actuel ( user connecté )
+        // on recupere les infos par rapport à la photo actuelle
         $modif = $this->Users->get($this->Auth->user('id'));
         // $modif = $this->Users->find()->where(['id' => $u['id']]);
         $this->set(compact('modif'));

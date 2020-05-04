@@ -2,27 +2,23 @@
     <div class="row justify-content-center">
         <div class="col-md-10 col-lg-8 my-5">
             <div class="title text-center">
-                <h1>Modification de l'événement :</h1>
+                <h1>Modification de l'événement</h1>
             </div>
 
             <div class="card card-form mt-5">
                 <div class="card-body">
-
                     <?= $this->Form->create($e, ['enctype' => 'multipart/form-data', 'class' => 'form']) ?>
                     <fieldset>
-                        <legend>Votre image de profil :</legend>
-                        <?php if (!empty($e->avatar)) { ?>
+                        <legend>Affiche de l'événement :</legend>
+                        <?php if (!empty($e->picture)) { ?>
                             <figure>
-                                <?= $this->Html->image('avatars/' . $e->avatar, ['alt' => 'Avatar de ' . $e->login, 'class' => 'img-fluid']) ?>
+                                <?= $this->Html->image('events/' . $e->picture, ['alt' => 'Affiche de ' . $e->title, 'class' => 'img-fluid']) ?>
                             </figure>
                         <?php } else { ?>
                             <figure>
                                 <?= $this->Html->image('default-event.png', ['alt' => 'Photo par défaut', 'class' => 'img-fluid']) ?>
                             </figure>
                         <?php } ?>
-                        <div class="cta my-3 text-center">
-                            <?= $this->Html->link('Upload une nouvelle image', ['action' => 'editavatar'], ['class' => 'btn btn-xs btn-primary']); ?>
-                        </div>
                     </fieldset>
                     <fieldset>
                         <legend>Informations de l'événement</legend>
@@ -30,7 +26,7 @@
                             <?= $this->Form->control('title', ['label' => 'Titre de l\'événément', 'class' => 'form-control']); ?>
                         </div>
                         <div class="form-group">
-                            <?= $this->Form->control('beginning', ['type' => 'datetime', 'label' => 'Date de l\'événement', 'class' => 'form-control']); ?>
+                            <?= $this->Form->control('beginning', ['type' => 'datetime', 'label' => 'Date de l\'événement', 'class' => 'form-control js-datetime']); ?>
                         </div>
                         <div class="form-group">
                             <?= $this->Form->control('description', ['label' => 'Description', 'class' => 'form-control']); ?>

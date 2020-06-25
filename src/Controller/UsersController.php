@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use Cake\Controller\Controller;
+use Cake\I18n\Time;
 
 class UsersController extends AppController
 {
@@ -19,6 +20,12 @@ class UsersController extends AppController
         $this->set(compact('users'));
     }
 
+    public function getCurrentUserId()
+    {
+        $u = $this->Auth->user();
+        return $u['id'];
+    }
+
     public function login()
     {
         // Check if user already auth
@@ -28,19 +35,12 @@ class UsersController extends AppController
         } else {
             // Check if is from post method
             if ($this->request->is(['post'])) {
-                var_dump($_POST);
                 $user = $this->Auth->identify();
                 // Test authentification
                 if ($user) {
                     $this->Auth->setUser($user);
-                    // Get the current user information
-                    $u = $this->Auth->user();
-                    $user = $this->Users->get($u['id']);
-                    // We save the current time for the lastin row
-                    $user->lastin = time();
-                    // We try to the save / update that on dabatase
-                    if ($this->Users->save($user)) {
-                        $this->Flash->success('Bienvenue : ' . $user->login);
+                    // Update lastin column on db with current time
+                    if ($this->updateLastIn($this->getCurrentUserId())) {
                         return $this->redirect($this->Auth->redirectUrl());
                     } else {
                         $this->Flash->success('Une erreur est survenue.');
@@ -84,14 +84,20 @@ class UsersController extends AppController
         if ($this->request->is(['post', 'put'])) {
             $this->Users->patchEntity($firstElement, $this->request->getData());
             if ($this->Users->save($firstElement)) {
-                $this->Flash->success('Modification(s) de votre compte effecutée(s)');
+                // Need to refresh Auth
+                // Retrieve user from DB
+                $authUser = $this->Users->get($u['id'])->toArray();
+                // Log user in using Auth
+                $this->Auth->setUser($authUser);
+                $this->Flash->success('Modification(s) de votre compte effectuée(s)');
                 return $this->redirect(['action' => 'view', $u['id']]);
             }
             $this->Flash->error('Erreur lors de la tentative de modification');
         }
     }
 
-    private function checkAvatar() {
+    private function checkAvatar()
+    {
         // on recupere les infos par rapport à l'avatar actuel ( user connecté )
         $modif = $this->Users->get($this->Auth->user('id'));
         // si on a pas recu le fichier ou le format de l'image n est pas le bon
@@ -108,16 +114,15 @@ class UsersController extends AppController
             // on remplace le npm de l'objet à sauvegarder
             $modif->avatar = $newName;
             // On essaie la sauvegarde (if else)
-            if($this->Users->save($modif)){
+            if ($this->Users->save($modif)) {
                 $this->Flash->success('Image uploadée');
                 // si l'ancien fichier existe --> !empty && file_exists
-                if(!empty($ancienNom) && file_exists(WWW_ROOT.'img/avatars/'.$ancienNom)) {
-                    unlink(WWW_ROOT.'img/avatars/'.$ancienNom);
+                if (!empty($ancienNom) && file_exists(WWW_ROOT . 'img/avatars/' . $ancienNom)) {
+                    unlink(WWW_ROOT . 'img/avatars/' . $ancienNom);
                 }
 
                 return $this->redirect(['action' => 'view', $modif->id]);
-            }
-            else {
+            } else {
                 $this->Flash->error('Modification impossible');
             }
         }
@@ -155,14 +160,16 @@ class UsersController extends AppController
             $n = $this->Users->patchEntity($n, $this->request->getData());
             // Test saving record on database
             if ($result = $this->Users->save($n)) {
-                // Test successful
                 // Retrieve user from DB
                 $authUser = $this->Users->get($result->id)->toArray();
                 // Log user in using Auth
                 $this->Auth->setUser($authUser);
                 // Display Flash success
-                $this->Flash->success('Bienvenue');
-                return $this->redirect(['action' => 'index']);
+                if ($this->updateLastIn($this->getCurrentUserId())) {
+                    return $this->redirect($this->Auth->redirectUrl());
+                } else {
+                    $this->Flash->success('Une erreur est survenue.');
+                }
             }
             // Error while trying to save
             $this->Flash->error('Une erreur est survenue. Veuillez réessayer.');
@@ -171,8 +178,40 @@ class UsersController extends AppController
 
     public function view($id)
     {
-        $user = $this->Users->get($id);
-        $this->set(compact('user'));
+        $req = $this->Users->find()->where(['id' => $id])->contain(['Events', 'Events.Users', 'Guests']);
+
+        $user = $req->first();
+        $currentTime = new Time('now');
+
+        $query = $this->Users->find()
+            ->contain(['Events', 'Events.Users', 'Guests'])
+            ->where(['id' => $id]);
+
+        if ($query->isEmpty()) {
+            $this->Flash->error('Profil d\'utilisateur inconnu');
+            return $this->redirect(['controller' => 'dashboard', 'action' => 'index']);
+        }
+
+        $upcomming = $query->first();
+
+        $this->set(compact('user', 'upcomming', 'currentTime'));
+    }
+
+    public function updateLastIn($userID)
+    {
+        // Get the current auth user
+        $u = $this->Auth->user();
+        // Query on database for this specific user
+        $user = $this->Users->get(['id' => $userID]);
+        // Update time of lastin
+        $time = new Time('now');
+        $user->lastin = $time;
+        // Try to save on db
+        if ($this->Users->save($user)) {
+            $this->Flash->success('Bienvenue : ' . $user->login);
+            return true;
+        }
+        return false;
     }
 
     public function delete()

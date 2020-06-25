@@ -489,6 +489,7 @@ div.message.warning:before {
 }
 
 /* Use 'one true layout' methods to get equal height columns */
+
 .container {
     overflow: hidden;
     min-height: 92%; /* full height almost always */
@@ -543,4 +544,20 @@ nav a {
 nav a.active {
     color: #116d76;
     background: #fff;
+}
+
+
+.user__details .user__avatar{
+    display: inline-flex;
+}
+
+
+label.label--incoming {
+    background: green;
+    color: white;
+}
+
+label.label--done {
+    background: red;
+    color: white;
 }

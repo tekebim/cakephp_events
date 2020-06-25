@@ -62,10 +62,20 @@ class AppController extends Controller
                     ]
                 ]
             ],
+            // Auth error message
+            'authError' => 'Vous devez être authentifié pour accéder à ce contenu',
             // In wich location
             'loginAction' => [
                 'controller' => 'Users',
                 'action' => 'login'
+            ],
+            'loginRedirect' => [
+                'controller' => 'Events',
+                'action' => 'index',
+            ],
+            'logoutRedirect' => [
+                'controller' => 'Dashboard',
+                'action' => 'index',
             ],
             // Rediction if not allowed
             'unauthorizedRedirect' => $this->referer()
